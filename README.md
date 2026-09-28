@@ -1,2 +1,3 @@
-# mc-friends-clien
+# mc-friends-client
+
 Play minecraft with friends
