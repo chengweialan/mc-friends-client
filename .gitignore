@@ -8,3 +8,4 @@ world/
 logs/
 .build-cache/
 dist/
+state/

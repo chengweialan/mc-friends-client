@@ -28,7 +28,7 @@ def build(cache, destination):
         ('packwiz-installer-bootstrap.jar', 'https://github.com/packwiz/packwiz-installer-bootstrap/releases/download/v0.0.3/packwiz-installer-bootstrap.jar', sources['packwiz-installer-bootstrap']['sha256'], None),
     ]
     client = destination/'FriendsMC'
-    shutil.copytree(ROOT/'client-source', client)
+    shutil.copytree(ROOT/'client-source', client, ignore=shutil.ignore_patterns('state', 'logs', 'accounts.json', '*.log'))
     for name,url,sha,folder in files:
         archive = cache/name
         download(url,archive,sha)
@@ -64,7 +64,14 @@ def build(cache, destination):
         for p in sorted(client.rglob('*')):
             if p.is_file(): z.write(p,p.relative_to(destination))
     digest=hashlib.sha256(archive.read_bytes()).hexdigest()
-    write(destination/'SHA256SUMS.txt',digest+'  '+archive.name+'\n')
+    patch=destination/'FriendsMC-UI-Update.zip'
+    with zipfile.ZipFile(patch,'w',zipfile.ZIP_DEFLATED) as z:
+        z.write(ROOT/'client-source/Start.cmd','Start.cmd')
+        for p in sorted((ROOT/'client-source/scripts').glob('*.ps1')):
+            z.write(p,'scripts/'+p.name)
+        z.write(ROOT/'UI-UPDATE.md','更新说明.md')
+    patch_digest=hashlib.sha256(patch.read_bytes()).hexdigest()
+    write(destination/'SHA256SUMS.txt',digest+'  '+archive.name+'\n'+patch_digest+'  '+patch.name+'\n')
     print(f'Built {archive}: {archive.stat().st_size} bytes, SHA256 {digest}')
 
 if __name__=='__main__':

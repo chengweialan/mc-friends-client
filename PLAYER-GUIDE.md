@@ -2,6 +2,9 @@
 
 适用 Windows 10/11 x64（Intel/AMD）。从 Releases 下载 `FriendsMC-Windows-x64.zip`，完整解压到可写目录，再双击 `FriendsMC/Start.cmd`。
 
+Start.cmd 会弹出图形进度窗口：显示当前步骤、已完成文件数量（更新器提供时）与耗时；成功后自动打开 PCL，失败时显示错误并提供复制日志。未提供总量的阶段显示动态进度条。游戏本体和加载器下载进度仍在 PCL 中显示。
+已有 v0.2.x PCL 客户端可仅下载 `FriendsMC-UI-Update.zip`，按其中说明覆盖入口和脚本，无需重新下载游戏。
+
 默认启动器为官方 PCL 2.13.1.1（制作时最新正式版），作者龙腾猫跃，官网 https://meloong.com/pcl 。此包不是 PCL 官方发行的整合包，没有修改 PCL 程序。
 
 首次 Start.cmd 会准备整合包并打开 PCL；PCL 自动导入旁边的 modpack.mrpack，联网安装 MC 26.3 与 NeoForge 26.3.0.26-beta。接受首次使用提示，登录拥有 Minecraft Java 版的微软账号，再点击“启动游戏”。Java 已附带并随整合包放入版本目录，不需要手动安装。首次生成导入包需要额外时间及磁盘空间。

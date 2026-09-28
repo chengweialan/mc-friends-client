@@ -1,6 +1,8 @@
 默认启动器切换为官方 PCL 2.13.1.1（制作时最新正式版）。Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25，暂无额外模组。
 
-0.2.1 为更新清单请求添加防缓存参数，避免发布后读取旧频道清单。
+0.3.0 添加图形更新窗口：步骤、文件数量进度、耗时、错误详情、复制日志与取消更新。游戏本体下载继续由 PCL 显示。
+
+已有 PCL 客户端请下载小型 `FriendsMC-UI-Update.zip`，把 Start.cmd 和 scripts 复制到原 FriendsMC 文件夹并替换同名文件；不会覆盖游戏、Java 或账号文件。新用户下载完整包。
 
 下载 FriendsMC-Windows-x64.zip，完整解压并双击 Start.cmd。首次需要自己的正版 Minecraft 微软账号和联网下载游戏资源。
 

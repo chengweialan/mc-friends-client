@@ -23,11 +23,37 @@ function Assert-Tools {
 }
 function Invoke-PackSync($Channel, [string]$GameDir) {
     Assert-Tools
-    Push-Location -LiteralPath $GameDir
+    Write-ClientProgress 3 '同步模组与配置' '正在读取清单并检查本地文件'
+    $startInfo = New-Object Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $Java
+    $startInfo.WorkingDirectory = $GameDir
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $bootstrap = Join-Path $Root 'tools/packwiz-installer-bootstrap.jar'
+    $installer = Join-Path $Root 'tools/packwiz-installer.jar'
+    $startInfo.Arguments = '-jar "'+$bootstrap+'" --bootstrap-no-update --bootstrap-main-jar "'+$installer+'" -g -s client "'+$Channel.packUrl+'"'
+    $process = New-Object Diagnostics.Process
+    $process.StartInfo = $startInfo
+    $process.Start() | Out-Null
+    $errorTask = $process.StandardError.ReadToEndAsync()
     try {
-        & $Java -jar (Join-Path $Root 'tools/packwiz-installer-bootstrap.jar') --bootstrap-no-update --bootstrap-main-jar (Join-Path $Root 'tools/packwiz-installer.jar') -g -s client $Channel.packUrl
-        if ($LASTEXITCODE -ne 0) { throw "Mod synchronization failed (exit $LASTEXITCODE). Game will not start." }
-    } finally { Pop-Location }
+        while (($line = $process.StandardOutput.ReadLine()) -ne $null) {
+            Write-Host $line
+            if ($line -match '^\((\d+)/(\d+)\)\s+(.*)') {
+                Write-ClientProgress 3 '同步模组与配置' $Matches[3] -Current ([int]$Matches[1]) -Total ([int]$Matches[2])
+            } elseif ($line -match 'Loading pack|Loading manifest') {
+                Write-ClientProgress 3 '读取整合包清单' '正在连接更新地址；网络较慢时请稍候'
+            } elseif ($line -match 'Checking local|Comparing|Validating') {
+                Write-ClientProgress 3 '检查本地文件' '正在比对已安装的模组与配置'
+            }
+        }
+        $process.WaitForExit()
+        $errors = $errorTask.Result
+        if ($errors) { Write-Host $errors }
+        if ($process.ExitCode -ne 0) { throw "Mod synchronization failed (exit $($process.ExitCode)). Game will not start. $errors" }
+    } finally { $process.Dispose() }
 }
 function Set-PclIni([string]$Path, [string]$Key, [string]$Value) {
     New-Item -ItemType Directory -Force -Path (Split-Path $Path) | Out-Null
@@ -37,6 +63,7 @@ function Set-PclIni([string]$Path, [string]$Key, [string]$Value) {
     [IO.File]::WriteAllLines($Path, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
 }
 function New-PclImport($Channel, [string]$Id, [string]$Stage) {
+    Write-ClientProgress 3 '准备首次安装文件' '正在打包 Java 与配置，完成后由 PCL 安装游戏'
     Add-Type -AssemblyName System.IO.Compression
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $manifest = @{formatVersion=1;game='minecraft';versionId=$Channel.release;name=$Id;summary='Friends MC - packwiz managed';files=@();dependencies=@{minecraft=$Channel.minecraft;neoforge=$Channel.neoforge}}
@@ -52,9 +79,15 @@ function New-PclImport($Channel, [string]$Id, [string]$Stage) {
             [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,$file.FullName,('overrides/'+$relative)) | Out-Null
         }
         $runtime = Split-Path (Split-Path $Java -Parent) -Parent
-        foreach ($file in Get-ChildItem -LiteralPath $runtime -Recurse -File) {
+        $runtimeFiles = @(Get-ChildItem -LiteralPath $runtime -Recurse -File)
+        $fileCount = 0
+        foreach ($file in $runtimeFiles) {
             $relative = $file.FullName.Substring($runtime.Length+1).Replace('\','/')
             [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,$file.FullName,('overrides/java/'+$relative)) | Out-Null
+            $fileCount++
+            if ($fileCount % 10 -eq 0 -or $fileCount -eq $runtimeFiles.Count) {
+                Write-ClientProgress 3 '准备首次安装文件' ('正在打包 '+$file.Name) -Current $fileCount -Total $runtimeFiles.Count
+            }
         }
     } finally { $zip.Dispose() }
     Move-Item -LiteralPath $temporary -Destination (Join-Path $Root 'launcher/modpack.mrpack') -Force

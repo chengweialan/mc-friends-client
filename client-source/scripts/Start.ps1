@@ -1,5 +1,10 @@
-param([switch]$PrepareOnly)
+﻿param([switch]$PrepareOnly, [string]$StatusPath='')
+[Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
+$script:StatusPath = $StatusPath
+$script:ReleaseLabel = ''
+. (Join-Path $PSScriptRoot 'Progress.ps1')
 try {
+    Write-ClientProgress 1 '检查本地环境' '正在校验 Java、更新器与启动器文件'
     . (Join-Path $PSScriptRoot 'Common.ps1')
     Assert-Tools
     $launcher = Join-Path $Root 'launcher/Plain Craft Launcher 2.exe'
@@ -8,7 +13,9 @@ try {
     if ($active) { throw 'Close this bundle''s PCL window and game, then reopen Start.cmd to synchronize safely.' }
     $lock = [IO.File]::Open((Join-Path $Root '.start.lock'), 'OpenOrCreate', 'ReadWrite', 'None')
     try {
+        Write-ClientProgress 2 '核对服务器版本' '正在获取最新发布清单，请保持网络连接'
         $channel = Get-Channel
+        $script:ReleaseLabel = 'MC '+$channel.minecraft+'  /  NeoForge '+$channel.neoforge+'  /  整合包 '+$channel.release
         $id = 'FriendsMC-' + $channel.minecraft + '-' + $channel.neoforge
         $mcDir = Join-Path $Root 'launcher/.minecraft'
         $instance = Join-Path $mcDir ('versions/'+$id)
@@ -43,6 +50,13 @@ try {
         Set-PclIni (Join-Path $Root 'launcher/PCL/Setup.ini') 'LaunchFolderSelect' ($mcDir+'\')
         $env:JAVA_HOME = Split-Path (Split-Path $Java -Parent) -Parent
         $env:PATH = (Split-Path $Java -Parent)+';'+$env:PATH
+        Write-ClientProgress 4 '准备打开 PCL' '版本与模组已对齐，即将交给启动器'
         if (!$PrepareOnly) { Start-Process -FilePath $launcher -WorkingDirectory (Split-Path $launcher) }
+        $finishedDetail = if ($PrepareOnly) { '文件检查已完成，本次未打开 PCL。' } else { 'PCL 已打开。登录账号后，点击「启动游戏」。' }
+        Write-ClientProgress 4 '准备就绪' $finishedDetail -State 'complete'
     } finally { $lock.Dispose() }
-} catch { Write-Host $_.Exception.Message -ForegroundColor Red; exit 1 }
+} catch {
+    Write-ClientProgress 0 '暂时无法完成更新' $_.Exception.Message -State 'error'
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    exit 1
+}
