@@ -27,7 +27,7 @@ OverrideJavaLocation=true
 JavaPath=$javaPortable
 AutomaticJava=false
 OverrideCommands=true
-PreLaunchCommand=powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`$INST_DIR/../../../scripts/Sync.ps1`"
+PreLaunchCommand=powershell.exe -NoProfile -ExecutionPolicy Bypass -File \`"`$INST_DIR/../../../scripts/Sync.ps1\`"
 "@ | Set-Content (Join-Path $instance 'instance.cfg') -Encoding UTF8
             @{formatVersion=1;components=@(
                 @{uid='net.minecraft';version=$channel.minecraft;important=$true},
