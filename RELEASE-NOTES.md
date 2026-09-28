@@ -1,5 +1,7 @@
 默认启动器切换为官方 PCL 2.13.1.1（制作时最新正式版）。Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25，暂无额外模组。
 
+0.2.1 为更新清单请求添加防缓存参数，避免发布后读取旧频道清单。
+
 下载 FriendsMC-Windows-x64.zip，完整解压并双击 Start.cmd。首次需要自己的正版 Minecraft 微软账号和联网下载游戏资源。
 
 首次自动生成 modpack.mrpack，由 PCL 自动导入并下载游戏；随后在 PCL 登录并点击启动。附带 Java 和 packwiz；每次 Start.cmd 同步完成后才打开 PCL。MC 或 NeoForge 变化时准备新实例，旧实例保留。

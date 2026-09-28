@@ -5,7 +5,8 @@ $script:Root = Split-Path $PSScriptRoot -Parent
 $script:Config = Get-Content (Join-Path $Root 'client.json') -Raw | ConvertFrom-Json
 $script:Java = Join-Path $Root $Config.javaRelativePath
 function Get-Channel {
-    $channel = Invoke-RestMethod -Uri $Config.channelUrl -TimeoutSec 30 -Headers @{'Cache-Control'='no-cache'}
+    $channelUrl = $Config.channelUrl + '?t=' + [DateTime]::UtcNow.Ticks
+    $channel = Invoke-RestMethod -Uri $channelUrl -TimeoutSec 30 -Headers @{'Cache-Control'='no-cache'}
     if ($channel.schema -ne 1 -or $channel.java -ne $Config.javaMajor) { throw 'This release needs a newer client bundle. Ask the server owner.' }
     foreach ($v in @($channel.minecraft, $channel.neoforge)) {
         if ($v -notmatch '^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$') { throw 'Invalid game/loader version.' }
