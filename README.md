@@ -1,6 +1,6 @@
 # Friends MC
 
-MC 26.3 / NeoForge 26.3.0.26-beta / Java 25。首版零额外模组。
+MC 26.3 / NeoForge 26.3.0.26-beta / Java 25。默认官方 PCL 2.13.1.1，零额外模组。
 
 ## 发布顺序
 
@@ -23,7 +23,10 @@ MC 26.3 / NeoForge 26.3.0.26-beta / Java 25。首版零额外模组。
 
 client-source 内是客户端启动/更新脚本；二进制下载来源与校验值见 client-source/THIRD-PARTY.json。
 更新器固定为 packwiz-installer 0.5.14，bootstrap 0.0.3，不动态下载新的更新器代码。
-版本变更建立新实例；Java 大版本变化要求新客户端包。
+版本变更通过 PCL 自动导入 modpack.mrpack 建立新实例；Java 大版本变化要求新客户端包。
+Start.cmd 在打开 PCL 前同步，未使用无法阻断失败的 PCL 启动前命令。复用 PCL 窗口或直接启动 PCL 会绕过同步，发布升级时需通知好友关闭游戏/PCL 并重新运行 Start.cmd。
+
+PCL 程序保持官方原样，作者龙腾猫跃；下载与说明：https://meloong.com/pcl 。此仓库不是 PCL 官方整合包。
 
 ## 构建
 

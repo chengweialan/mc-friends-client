@@ -4,5 +4,6 @@
   "javaRelativePath": "runtime/zulu25.36.205-ca-jre25.0.4.1-win_x64/bin/java.exe",
   "javaMajor": 25,
   "installerSha256": "c9f646908d340d84773948a9a7d98bc1dae250d35e1016dc6e2b8459760b5598",
-  "bootstrapSha256": "a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c"
+  "bootstrapSha256": "a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c",
+  "launcherSha256": "30eb93c62fc51ede0898648e67455478a3d5a4f279938ae65aec77b84cb9703f"
 }

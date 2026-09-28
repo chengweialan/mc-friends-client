@@ -1,10 +1,4 @@
 {
-  "Prism Launcher": {
-    "version": "11.1.0",
-    "url": "https://github.com/PrismLauncher/PrismLauncher/releases/tag/11.1.0",
-    "source": "https://github.com/PrismLauncher/PrismLauncher/tree/11.1.0",
-    "sha256": "2bf5e879ea1c3f6a1aaaa43539667ce296308abf3e6a984d5cc4c48bfe3c431c"
-  },
   "Zulu Java": {
     "version": "25.0.4.1",
     "url": "https://cdn.azul.com/zulu/bin/zulu25.36.205-ca-jre25.0.4.1-win_x64.zip",
@@ -19,5 +13,12 @@
     "version": "0.0.3",
     "source": "https://github.com/packwiz/packwiz-installer-bootstrap/tree/v0.0.3",
     "sha256": "a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c"
+  },
+  "PCL": {
+    "version": "2.13.1.1",
+    "url": "https://raw.githubusercontent.com/Meloong-Git/PCL/0e0d12fdce6a2804916fb2be60e41144da637c18/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip",
+    "source": "https://github.com/Meloong-Git/PCL/tree/2.13.1.1",
+    "sha256": "5321f0754137fbdd2c5c1420db868b8e516bcd5d4ed94729d00813f1597c4b46",
+    "exeSha256": "30eb93c62fc51ede0898648e67455478a3d5a4f279938ae65aec77b84cb9703f"
   }
 }

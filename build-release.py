@@ -22,7 +22,7 @@ def build(cache, destination):
         raise RuntimeError('Output directory already exists; use a fresh directory.')
     sources = json.loads((ROOT/'client-source/THIRD-PARTY.json').read_text(encoding='utf-8-sig'))
     files = [
-        ('prism.zip', 'https://github.com/PrismLauncher/PrismLauncher/releases/download/11.1.0/PrismLauncher-Windows-MinGW-w64-Portable-11.1.0.zip', sources['Prism Launcher']['sha256'], 'launcher'),
+        ('pcl-2.13.1.1.zip', sources['PCL']['url'], sources['PCL']['sha256'], 'launcher'),
         ('java.zip', sources['Zulu Java']['url'], sources['Zulu Java']['sha256'], 'runtime'),
         ('packwiz-installer.jar', 'https://github.com/packwiz/packwiz-installer/releases/download/v0.5.14/packwiz-installer.jar', sources['packwiz-installer']['sha256'], None),
         ('packwiz-installer-bootstrap.jar', 'https://github.com/packwiz/packwiz-installer-bootstrap/releases/download/v0.0.3/packwiz-installer-bootstrap.jar', sources['packwiz-installer-bootstrap']['sha256'], None),
@@ -42,8 +42,8 @@ def build(cache, destination):
         else:
             (client/'tools').mkdir(exist_ok=True)
             shutil.copy2(archive,client/'tools'/name)
-    write(client/'launcher/portable.txt','')
-    write(client/'launcher/prismlauncher.cfg','[General]\nLanguage=zh_CN\nIgnoreJavaWizard=true\nAutomaticJavaSwitch=false\nAutomaticJavaDownload=false\nJavaPath=../runtime/zulu25.36.205-ca-jre25.0.4.1-win_x64/bin/java.exe\nMinMemAlloc=512\nMaxMemAlloc=4096\n')
+    if hashlib.sha256((client/'launcher/Plain Craft Launcher 2.exe').read_bytes()).hexdigest() != sources['PCL']['exeSha256']:
+        raise RuntimeError('Unexpected PCL executable in official archive')
     def nbtstr(s):
         b=s.encode(); return struct.pack('>H',len(b))+b
     data=b'\x0a\x00\x00\x09'+nbtstr('servers')+b'\x0a'+struct.pack('>i',1)
@@ -52,7 +52,7 @@ def build(cache, destination):
     (client/'templates').mkdir(exist_ok=True)
     (client/'templates/servers.dat').write_bytes(data+b'\x00\x00')
     license_urls={
-        'Prism-COPYING.md':'https://raw.githubusercontent.com/PrismLauncher/PrismLauncher/11.1.0/COPYING.md',
+        'PCL-LICENCE':'https://raw.githubusercontent.com/Meloong-Git/PCL/0ce35fe7e5cb939500ef754ff177b082927374ad/LICENCE',
         'packwiz-installer-LICENSE':'https://raw.githubusercontent.com/packwiz/packwiz-installer/v0.5.14/LICENSE',
         'packwiz-bootstrap-LICENSE':'https://raw.githubusercontent.com/packwiz/packwiz-installer-bootstrap/v0.0.3/LICENSE',
     }

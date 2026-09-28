@@ -28,3 +28,33 @@ function Invoke-PackSync($Channel, [string]$GameDir) {
         if ($LASTEXITCODE -ne 0) { throw "Mod synchronization failed (exit $LASTEXITCODE). Game will not start." }
     } finally { Pop-Location }
 }
+function Set-PclIni([string]$Path, [string]$Key, [string]$Value) {
+    New-Item -ItemType Directory -Force -Path (Split-Path $Path) | Out-Null
+    $lines = @()
+    if (Test-Path -LiteralPath $Path) { $lines = @(Get-Content -LiteralPath $Path -Encoding UTF8 | Where-Object { !$_.StartsWith($Key+':') }) }
+    $lines += $Key+':'+$Value
+    [IO.File]::WriteAllLines($Path, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
+}
+function New-PclImport($Channel, [string]$Id, [string]$Stage) {
+    Add-Type -AssemblyName System.IO.Compression
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $manifest = @{formatVersion=1;game='minecraft';versionId=$Channel.release;name=$Id;summary='Friends MC - packwiz managed';files=@();dependencies=@{minecraft=$Channel.minecraft;neoforge=$Channel.neoforge}}
+    $manifestPath = Join-Path $Stage 'modrinth.index.json'
+    [IO.File]::WriteAllText($manifestPath, ($manifest | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
+    $temporary = Join-Path $Root ('state/import-'+[Guid]::NewGuid().ToString('N')+'.mrpack')
+    $zip = [IO.Compression.ZipFile]::Open($temporary,[IO.Compression.ZipArchiveMode]::Create)
+    try {
+        [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,$manifestPath,'modrinth.index.json') | Out-Null
+        $overrides = Join-Path $Stage 'overrides'
+        foreach ($file in Get-ChildItem -LiteralPath $overrides -Recurse -File) {
+            $relative = $file.FullName.Substring($overrides.Length+1).Replace('\','/')
+            [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,$file.FullName,('overrides/'+$relative)) | Out-Null
+        }
+        $runtime = Split-Path (Split-Path $Java -Parent) -Parent
+        foreach ($file in Get-ChildItem -LiteralPath $runtime -Recurse -File) {
+            $relative = $file.FullName.Substring($runtime.Length+1).Replace('\','/')
+            [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,$file.FullName,('overrides/java/'+$relative)) | Out-Null
+        }
+    } finally { $zip.Dispose() }
+    Move-Item -LiteralPath $temporary -Destination (Join-Path $Root 'launcher/modpack.mrpack') -Force
+}
