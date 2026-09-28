@@ -1,0 +1,23 @@
+{
+  "Prism Launcher": {
+    "version": "11.1.0",
+    "url": "https://github.com/PrismLauncher/PrismLauncher/releases/tag/11.1.0",
+    "source": "https://github.com/PrismLauncher/PrismLauncher/tree/11.1.0",
+    "sha256": "2bf5e879ea1c3f6a1aaaa43539667ce296308abf3e6a984d5cc4c48bfe3c431c"
+  },
+  "Zulu Java": {
+    "version": "25.0.4.1",
+    "url": "https://cdn.azul.com/zulu/bin/zulu25.36.205-ca-jre25.0.4.1-win_x64.zip",
+    "sha256": "6653196e329d393ea2ef007af90517c01781dbf5aac02fdfa84d912a55bf78f3"
+  },
+  "packwiz-installer": {
+    "version": "0.5.14",
+    "source": "https://github.com/packwiz/packwiz-installer/tree/v0.5.14",
+    "sha256": "c9f646908d340d84773948a9a7d98bc1dae250d35e1016dc6e2b8459760b5598"
+  },
+  "packwiz-installer-bootstrap": {
+    "version": "0.0.3",
+    "source": "https://github.com/packwiz/packwiz-installer-bootstrap/tree/v0.0.3",
+    "sha256": "a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c"
+  }
+}

@@ -1,0 +1,10 @@
+*.jar
+*.zip
+.cache/
+.pw.toml
+accounts.json
+*.pem
+world/
+logs/
+.build-cache/
+dist/

@@ -1,0 +1,26 @@
+name: Build portable client
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [channel.json]
+permissions:
+  contents: write
+concurrency:
+  group: client-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate release and build clean bundle
+        run: |
+          python3 validate-release.py
+          python3 build-release.py
+      - name: Publish download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(python3 -c 'import json; print(json.load(open("channel.json"))["release"])')
+          gh release create "v$VERSION" dist/FriendsMC-Windows-x64.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $VERSION (Windows x64)" --notes-file RELEASE-NOTES.md

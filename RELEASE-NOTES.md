@@ -1,0 +1,7 @@
+首个客户端测试发布：Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25，暂无额外模组。
+
+下载 FriendsMC-Windows-x64.zip，完整解压并双击 Start.cmd。首次需要自己的正版 Minecraft 微软账号和联网下载游戏资源。
+
+附带便携启动器、Java 和 packwiz；启动前同步固定发布清单。MC 或 NeoForge 变化时创建新实例，旧实例保留。
+
+自动更新测试已通过；微软账号登录、图形界面启动和实际联机仍需玩家验收。服务器可能处于关闭状态，测试前联系服主。

@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "release": "0.1.0",
+  "minecraft": "26.3",
+  "neoforge": "26.3.0.26-beta",
+  "java": 25,
+  "packUrl": "REPLACE_WITH_IMMUTABLE_COMMIT_URL"
+}
