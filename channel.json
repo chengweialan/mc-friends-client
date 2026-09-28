@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "0.1.0",
+  "release": "0.1.1",
   "minecraft": "26.3",
   "neoforge": "26.3.0.26-beta",
   "java": 25,
-  "packUrl": "https://raw.githubusercontent.com/chengweialan/mc-friends-client/eaa3cecbe8e21cff7f7542b8398ddebc5d9cc7a1/pack/pack.toml"
+  "packUrl": "https://raw.githubusercontent.com/chengweialan/mc-friends-client/52ce8b235edf67571ae9b72c21a1d2863d579ea6/pack/pack.toml"
 }
