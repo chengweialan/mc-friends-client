@@ -62,6 +62,9 @@ jobs:
           python3 build-release.py
           javac --release 17 -encoding UTF-8 -d dist/network-test updater/FriendsUpdater.java updater/NetworkTest.java
           java -cp dist/network-test NetworkTest
+          mkdir -p dist/sync-test
+          cp download-sources.json dist/sync-test/download-sources.json
+          java -jar dist/FriendsMC/tools/friends-updater.jar channel dist/sync-test dist/sync-test/channel.json
           python3 test-updater.py --java java --jar dist/FriendsMC/tools/friends-updater.jar --root dist/sync-test
       - name: Publish verified clients to COS
         if: steps.version.outputs.build == 'true'

@@ -1,6 +1,6 @@
 # Friends MC 国内更新源接入
 
-当前阶段：更新器支持重试和镜像，但 download-sources.json 的 mirrors 仍为空。存储桶未配置前，仍然使用 GitHub / Modrinth，不能宣称已解决国内连接问题。
+已配置北京存储桶 friends-mc-downloads-1318356926。下载源地址已写入 download-sources.json；实际发布结果以 GitHub Actions 的 Publish COS update mirror 流程和匿名下载验证为准。
 
 ## 1. 创建专用存储桶
 
@@ -53,4 +53,6 @@ python publish-cos.py --directory mirror-stage --bucket friends-mc-downloads-实
 
 在关闭代理的内地网络测试 Windows / Mac 的首次获取清单、模组下载、第二次无变化启动，以及镜像不可用时的备用源。首次游戏资源下载由 PCL / Prism 负责，需要单独验证，不能将模组同步成功视为整个首次安装已验证。
 
-发布补丁及完整包到国内源后，再更新好友下载指南；保留 GitHub Release 为备用。当前尚未设置云账号，也未发布国内下载补丁。
+发布补丁及完整包到国内源后，再更新好友下载指南；保留 GitHub Release 为备用。GitHub Actions 使用仓库 Secrets 中的 COS_SECRET_ID 和 COS_SECRET_KEY，桶名和地域已写在工作流中，无需另设 Variables。
+
+CLIENT-VERSION 管理客户端工具版本（当前 0.4.1）；channel.json 管理游戏整合包版本（当前 0.4.0）。普通模组更新提交新的固定版本清单并更新 channel.json，即触发国内源发布。修改启动脚本或更新器时，需同时递增 CLIENT-VERSION 以发布新客户端；仅更改 GitHub Secrets 不会自动触发，修改后重跑失败的工作流。
