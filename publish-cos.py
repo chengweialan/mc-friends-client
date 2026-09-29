@@ -26,11 +26,9 @@ def put_verified(api,bucket,region,key,data,mutable=False):
     print('Uploading:',key,len(data),'bytes',flush=True)
     # A seekable stream lets requests send bounded chunks instead of timing out while writing one huge byte string.
     api.put_object(Bucket=bucket,Key=key,Body=UploadStream(data,key),CacheControl='no-cache, max-age=0' if mutable else 'public, max-age=31536000, immutable')
-    print('Upload complete; checking public download:',key,flush=True)
-    url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
-    with urllib.request.urlopen(url,timeout=120) as response: actual=response.read()
-    if hashlib.sha256(actual).digest()!=hashlib.sha256(data).digest(): raise RuntimeError('Public verification failed: '+key)
-    print('Verified:',key,flush=True)
+    # Owner requests fast publishing: trust successful COS PUT responses instead
+    # of downloading each uploaded file again over the cross-border connection.
+    print('Uploaded:',key,flush=True)
 
 def publish(directory, bucket, region, prefix):
     api=client(bucket,region)
@@ -43,7 +41,7 @@ def publish(directory, bucket, region, prefix):
         key=prefix+'/'+file.relative_to(directory).as_posix();data=file.read_bytes()
         # Reuse previously uploaded immutable single-PUT objects; clients still
         # verify their catalog SHA-256. Avoid re-uploading every mod on pack edits.
-        if file.parent!=directory:
+        if file.relative_to(directory).parts[0] in ('mods','licenses'):
             url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
             try:
                 with urllib.request.urlopen(urllib.request.Request(url,method='HEAD'),timeout=20) as response:
@@ -78,3 +76,4 @@ if __name__=='__main__':
     if not a.prefix or any(x in ('','..','.') for x in a.prefix.split('/')):raise ValueError('Invalid prefix')
     if a.assets:publish_assets(a.assets,a.client_version,a.bucket,a.region,a.prefix)
     else:publish(a.directory,a.bucket,a.region,a.prefix)
+
