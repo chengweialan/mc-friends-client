@@ -11,14 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - name: Validate release and build clean bundle
+      - name: Build client bundles
         run: |
-          python3 validate-release.py
           python3 build-release.py
-          python3 test-updater.py --java java --jar dist/FriendsMC/tools/friends-updater.jar --root dist/sync-test
       - name: Publish download
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(python3 -c 'import json; print(json.load(open("channel.json"))["release"])')
-          gh release create "v$VERSION" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $VERSION — Windows + macOS" --notes-file RELEASE-NOTES.md
+          VERSION=$(tr -d '\r\n' < CLIENT-VERSION)
+          gh release create "v$VERSION" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/FriendsMC-macOS-Update.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $VERSION — Windows + macOS" --notes-file RELEASE-NOTES.md

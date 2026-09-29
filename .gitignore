@@ -9,3 +9,5 @@ logs/
 .build-cache/
 dist/
 state/
+
+.mod-cache/
