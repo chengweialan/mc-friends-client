@@ -64,17 +64,24 @@ jobs:
           mkdir -p dist/sync-test
           cp download-sources.json dist/sync-test/download-sources.json
           python3 test-updater.py --java java --jar dist/FriendsMC/tools/friends-updater.jar --root dist/sync-test
-      - name: Publish verified clients to COS
+      - name: Publish complete clients immediately
         if: steps.version.outputs.build == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v$(cat CLIENT-VERSION)" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/FriendsMC-macOS-Update.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $(cat CLIENT-VERSION) — 完整客户端（已合并国内源补丁）" --notes-file RELEASE-NOTES.md
+      - name: Download existing release for mirror retry
+        if: steps.version.outputs.build == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          gh release download "v$(cat CLIENT-VERSION)" --dir dist --pattern '*.zip' --pattern SHA256SUMS.txt
+      - name: Publish verified clients to COS
         env:
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
         run: |
           python3 -m pip install 'cos-python-sdk-v5>=1.9,<2'
           python3 publish-cos.py --assets dist --client-version "$(cat CLIENT-VERSION)" --bucket "$COS_BUCKET" --region "$COS_REGION"
-      - name: Publish GitHub backup downloads
-        if: steps.version.outputs.build == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "v$(cat CLIENT-VERSION)" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/FriendsMC-macOS-Update.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $(cat CLIENT-VERSION) — 国内更新源" --notes-file RELEASE-NOTES.md
+
