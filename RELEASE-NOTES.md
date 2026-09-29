@@ -1,20 +1,12 @@
-# Friends MC 0.4.0
+# Friends MC 客户端 0.4.1 — 国内下载源
 
-Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25。
+客户端更新器升级；游戏整合包仍为 0.4.0，Minecraft 26.3 / NeoForge 26.3.0.26-beta，模组版本保持不变。
 
-- Windows 保留 PCL2，新增必装/可选模组选择与记忆功能。
-- 新增 macOS Apple Silicon 与 Intel 客户端，内置 Prism 和对应 Java，双击 Start.command。
-- 两个平台使用同一固定版本清单，下载带 SHA-256 校验，失败中止，未完成事务下次恢复。
-- 保留个人模组、地图、按键与账号，检测重复 mod ID。
-- 3 个共同玩法模组必装，12 个辅助模组可选，3 个前置库自动跟随安装。
-- 语音对外地址 wze.rainplay.cn:51612（UDP），游戏地址仍为 wze.rainplay.cn:21250。
+- Windows 保留 PCL，Mac 保留 Prism；两端优先通过北京 COS 获取版本和模组清单，GitHub 备用。
+- 三轮重试，下载文件哈希不符也会换源；仍失败时停止启动，保留原有文件。
+- 已核对许可的 8 个模组国内镜像，其余 10 个（含依赖）仍从作者 Modrinth CDN 获取，完整名单和作者链接见 MOD-CREDITS.md。
+- Windows 旧用户下载 FriendsMC-UI-Update.zip；Mac 旧用户下载 FriendsMC-macOS-Update.zip。退出游戏及启动器，将补丁内容合并覆盖到原 FriendsMC 文件夹。不要删除原游戏、地图、账号文件。
+- 国内补丁地址：https://friends-mc-downloads-1318356926.cos.ap-beijing.myqcloud.com/friends-mc/clients/0.4.1/FriendsMC-UI-Update.zip
+- 游戏首次下载、NeoForge 安装和微软账号登录仍由启动器处理，需单独验证当地网络。此更新不承诺所有网络都能无代理完成首次安装。
 
-## 旧 Windows 用户
-
-下载 FriendsMC-UI-Update.zip，退出游戏和 PCL，解压覆盖原 FriendsMC 文件夹（Start.cmd、scripts、tools）。不删除原来的游戏和账号。随后运行 Start.cmd。旧更新器会提示需要升级，避免绕过新的模组选择流程。
-
-## 暂缓的模组
-
-垃圾槽的 Balm 依赖在当前 NeoForge 启动测试崩溃，暂不安装。旅人标题、流畅加载重置版、更多箱子（Iron Chests / Sophisticated Storage）、自动汉化更新未找到 26.3 NeoForge 文件。ModernFix 使用已标明的 mVUS 社区维护分支。详情见 MOD-STATUS.md。
-
-macOS 首次可能需要在隐私与安全性中允许打开，并授予麦克风权限；首次游戏安装仍需联网、登录正版微软账号。
+新用户按系统下载完整包。国内源与 GitHub Release 文件一致，校验值见 SHA256SUMS.txt。

@@ -17,6 +17,8 @@ def prepare(output, approvals, cache):
     if output.exists(): raise ValueError('Use a fresh output directory')
     target=output/'releases'/match[1]/'pack'
     shutil.copytree(ROOT/'pack',target)
+    shutil.copytree(ROOT/'mirror-licenses',output/'licenses')
+    shutil.copyfile(ROOT/'MOD-CREDITS.md',output/'MOD-CREDITS.md')
     approved=json.loads(approvals.read_text(encoding='utf-8')) if approvals else {}
     report={'mirrored':[], 'upstreamOnly':[]}
     for mod in json.loads(catalog_bytes)['mods']:

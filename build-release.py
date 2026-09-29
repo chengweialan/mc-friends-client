@@ -30,6 +30,8 @@ def build(cache, destination):
     client = destination/'FriendsMC'
     shutil.copytree(ROOT/'client-source', client, ignore=shutil.ignore_patterns('state', 'logs', 'accounts.json', '*.log'))
     shutil.copy2(ROOT/'download-sources.json',client/'download-sources.json')
+    shutil.copy2(ROOT/'MOD-CREDITS.md',client/'MOD-CREDITS.md')
+    shutil.copytree(ROOT/'mirror-licenses',client/'licenses/mods')
     for name,url,sha,folder in files:
         archive = cache/name
         download(url,archive,sha)
@@ -77,6 +79,9 @@ def build(cache, destination):
             z.write(p,'scripts/'+p.name)
         z.write(updater,'tools/friends-updater.jar')
         z.write(ROOT/'download-sources.json','download-sources.json')
+        z.write(ROOT/'MOD-CREDITS.md','MOD-CREDITS.md')
+        for p in (ROOT/'mirror-licenses').glob('*'):
+            if p.is_file(): z.write(p,'licenses/mods/'+p.name)
         z.write(ROOT/'UI-UPDATE.md','更新说明.md')
     patch_digest=hashlib.sha256(patch.read_bytes()).hexdigest()
     sums=digest+'  '+archive.name+'\n'+patch_digest+'  '+patch.name+'\n'
@@ -90,6 +95,9 @@ def build(cache, destination):
             add('Start.command',(ROOT/'mac-source/Start.command').read_bytes(),0o100755)
             add('tools/friends-updater.jar',updater.read_bytes())
             add('download-sources.json',(ROOT/'download-sources.json').read_bytes())
+            add('MOD-CREDITS.md',(ROOT/'MOD-CREDITS.md').read_bytes())
+            for p in (ROOT/'mirror-licenses').glob('*'):
+                if p.is_file(): add('licenses/mods/'+p.name,p.read_bytes())
             add('templates/servers.dat',(client/'templates/servers.dat').read_bytes())
             add('使用说明.md',(ROOT/'MAC-GUIDE.md').read_bytes())
             add('THIRD-PARTY.json',json.dumps(mac,indent=2).encode())
@@ -115,6 +123,15 @@ def build(cache, destination):
             add('licenses/Prism-COPYING.md',urllib.request.urlopen('https://raw.githubusercontent.com/PrismLauncher/PrismLauncher/11.1.1/COPYING.md').read())
             add('licenses/SOURCE-LINKS.txt',b'Prism Launcher source: https://github.com/PrismLauncher/PrismLauncher/tree/11.1.1\nFriends updater source: https://github.com/chengweialan/mc-friends-client/tree/main/updater\nZulu OpenJDK source: https://www.azul.com/downloads/?package=jdk#zulu\n')
         sums+=hashlib.sha256(output.read_bytes()).hexdigest()+'  '+output.name+'\n'
+    mac_patch=destination/'FriendsMC-macOS-Update.zip'
+    with zipfile.ZipFile(mac_patch,'w',zipfile.ZIP_DEFLATED) as z:
+        z.write(updater,'tools/friends-updater.jar')
+        z.write(ROOT/'download-sources.json','download-sources.json')
+        z.write(ROOT/'MOD-CREDITS.md','MOD-CREDITS.md')
+        z.write(ROOT/'NETWORK-UPDATE.md','更新说明.md')
+        for p in (ROOT/'mirror-licenses').glob('*'):
+            if p.is_file(): z.write(p,'licenses/mods/'+p.name)
+    sums+=hashlib.sha256(mac_patch.read_bytes()).hexdigest()+'  '+mac_patch.name+'\n'
     write(destination/'SHA256SUMS.txt',sums)
     print(f'Built {archive}: {archive.stat().st_size} bytes, SHA256 {digest}')
 

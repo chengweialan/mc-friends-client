@@ -1,9 +1,6 @@
 name: Build Windows and macOS clients
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths: [channel.json]
 permissions:
   contents: write
 concurrency:

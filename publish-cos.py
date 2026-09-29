@@ -1,13 +1,22 @@
 """Publish prepared artifacts. Credentials only from environment; no ACL changes.
 Requires cos-python-sdk-v5. A dedicated public-read bucket/prefix is configured separately.
 """
-import argparse, hashlib, json, os, urllib.request
+import argparse, hashlib, json, os, re, urllib.request, urllib.parse
 from pathlib import Path
 
-def publish(directory, bucket, region, prefix):
+def client(bucket,region):
     from qcloud_cos import CosConfig, CosS3Client
-    if not prefix or any(p in ('','..','.') for p in prefix.split('/')): raise ValueError('Use a non-empty dedicated prefix')
-    client=CosS3Client(CosConfig(Region=region,SecretId=os.environ['COS_SECRET_ID'],SecretKey=os.environ['COS_SECRET_KEY'],Token=os.environ.get('COS_SESSION_TOKEN'),Scheme='https'))
+    return CosS3Client(CosConfig(Region=region,SecretId=os.environ['COS_SECRET_ID'],SecretKey=os.environ['COS_SECRET_KEY'],Token=os.environ.get('COS_SESSION_TOKEN'),Scheme='https'))
+
+def put_verified(api,bucket,region,key,data,mutable=False):
+    api.put_object(Bucket=bucket,Key=key,Body=data,CacheControl='no-cache, max-age=0' if mutable else 'public, max-age=31536000, immutable')
+    url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
+    with urllib.request.urlopen(url,timeout=120) as response: actual=response.read()
+    if hashlib.sha256(actual).digest()!=hashlib.sha256(data).digest(): raise RuntimeError('Public verification failed: '+key)
+    print('Verified:',key)
+
+def publish(directory, bucket, region, prefix):
+    api=client(bucket,region)
     channel=directory/'channel.json';manifest=json.loads(channel.read_text(encoding='utf-8-sig'))
     commit=manifest['packUrl'].split('/')[5]
     catalog=directory/'releases'/commit/'pack/mods.lock.json'
@@ -15,12 +24,24 @@ def publish(directory, bucket, region, prefix):
     files=sorted(p for p in directory.rglob('*') if p.is_file() and p!=channel)
     for file in files+[channel]:
         key=prefix+'/'+file.relative_to(directory).as_posix();data=file.read_bytes()
-        client.put_object(Bucket=bucket,Key=key,Body=data,CacheControl='no-cache, max-age=0' if file==channel else 'public, max-age=31536000, immutable')
-        # Verify anonymous public retrieval before publishing the mutable channel pointer.
-        url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
-        with urllib.request.urlopen(url,timeout=60) as response: actual=response.read()
-        if hashlib.sha256(actual).digest()!=hashlib.sha256(data).digest(): raise RuntimeError('Public verification failed: '+key)
-        print('Verified:',key)
+        put_verified(api,bucket,region,key,data,mutable=file==channel or file.parent==directory)
+
+def publish_assets(directory, version, bucket, region, prefix):
+    if not re.fullmatch(r'\d+\.\d+\.\d+',version):raise ValueError('Invalid client version')
+    sums=directory/'SHA256SUMS.txt';files=[]
+    for line in sums.read_text().splitlines():
+        sha,name=line.split()
+        if not re.fullmatch(r'[A-Za-z0-9_.-]+\.zip',name):raise ValueError('Invalid asset name')
+        data=(directory/name).read_bytes()
+        if hashlib.sha256(data).hexdigest()!=sha:raise ValueError('Asset hash mismatch: '+name)
+        files.append((name,data))
+    api=client(bucket,region)
+    for name,data in files+[('SHA256SUMS.txt',sums.read_bytes())]:
+        put_verified(api,bucket,region,prefix+'/clients/'+version+'/'+name,data)
+    print('All client assets verified:',version)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--directory',type=Path,required=True);p.add_argument('--bucket',required=True);p.add_argument('--region',required=True);p.add_argument('--prefix',default='friends-mc');a=p.parse_args();publish(a.directory,a.bucket,a.region,a.prefix)
+    p=argparse.ArgumentParser();group=p.add_mutually_exclusive_group(required=True);group.add_argument('--directory',type=Path);group.add_argument('--assets',type=Path);p.add_argument('--client-version');p.add_argument('--bucket',required=True);p.add_argument('--region',required=True);p.add_argument('--prefix',default='friends-mc');a=p.parse_args()
+    if not a.prefix or any(x in ('','..','.') for x in a.prefix.split('/')):raise ValueError('Invalid prefix')
+    if a.assets:publish_assets(a.assets,a.client_version,a.bucket,a.region,a.prefix)
+    else:publish(a.directory,a.bucket,a.region,a.prefix)

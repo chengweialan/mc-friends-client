@@ -1,6 +1,9 @@
 name: Publish COS update mirror
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [channel.json, CLIENT-VERSION, mirror-approvals.json, '.github/workflows/publish-mirror.yml', prepare-mirror.py, publish-cos.py]
 permissions:
   contents: read
 env:
@@ -33,4 +36,44 @@ jobs:
           COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
         run: python3 publish-cos.py --directory mirror-stage --bucket "$COS_BUCKET" --region "$COS_REGION"
-
+  clients:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check whether client version is already published
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(cat CLIENT-VERSION)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo 'build=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'build=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build and test Windows and macOS clients
+        if: steps.version.outputs.build == 'true'
+        run: |
+          python3 validate-release.py
+          python3 build-release.py
+          javac --release 17 -encoding UTF-8 -d dist/network-test updater/FriendsUpdater.java updater/NetworkTest.java
+          java -cp dist/network-test NetworkTest
+          python3 test-updater.py --java java --jar dist/FriendsMC/tools/friends-updater.jar --root dist/sync-test
+      - name: Publish verified clients to COS
+        if: steps.version.outputs.build == 'true'
+        env:
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+        run: |
+          python3 -m pip install 'cos-python-sdk-v5>=1.9,<2'
+          python3 publish-cos.py --assets dist --client-version "$(cat CLIENT-VERSION)" --bucket "$COS_BUCKET" --region "$COS_REGION"
+      - name: Publish GitHub backup downloads
+        if: steps.version.outputs.build == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v$(cat CLIENT-VERSION)" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/FriendsMC-macOS-Update.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $(cat CLIENT-VERSION) — 国内更新源" --notes-file RELEASE-NOTES.md
