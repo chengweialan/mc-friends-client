@@ -11,7 +11,7 @@ env:
   COS_REGION: ap-beijing
 concurrency:
   group: cos-mirror-publish
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -37,7 +37,6 @@ jobs:
           COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
         run: python3 publish-cos.py --directory mirror-stage --bucket "$COS_BUCKET" --region "$COS_REGION"
   clients:
-    needs: publish
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -64,7 +63,6 @@ jobs:
           java -cp dist/network-test NetworkTest
           mkdir -p dist/sync-test
           cp download-sources.json dist/sync-test/download-sources.json
-          java -jar dist/FriendsMC/tools/friends-updater.jar channel dist/sync-test dist/sync-test/channel.json
           python3 test-updater.py --java java --jar dist/FriendsMC/tools/friends-updater.jar --root dist/sync-test
       - name: Publish verified clients to COS
         if: steps.version.outputs.build == 'true'
