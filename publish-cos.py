@@ -1,7 +1,7 @@
 """Publish prepared artifacts. Credentials only from environment; no ACL changes.
 Requires cos-python-sdk-v5. A dedicated public-read bucket/prefix is configured separately.
 """
-import argparse, hashlib, io, json, os, re, urllib.request, urllib.parse
+import argparse, concurrent.futures, hashlib, io, json, os, re, time, urllib.request, urllib.parse
 from pathlib import Path
 
 def client(bucket,region):
@@ -12,10 +12,21 @@ def client(bucket,region):
         raise ValueError('COS secrets contain internal whitespace or quotes; paste the raw matching values in GitHub Secrets')
     return CosS3Client(CosConfig(Region=region,SecretId=secret_id,SecretKey=secret_key,Token=os.environ.get('COS_SESSION_TOKEN'),Scheme='https',Timeout=120,EnableOldDomain=False,EnableInternalDomain=False),retry=1)
 
+class UploadStream(io.BytesIO):
+    def __init__(self,data,key):
+        super().__init__(data);self.key=key;self.total=len(data);self.last=time.monotonic()
+    def read(self,size=-1):
+        part=super().read(size)
+        if time.monotonic()-self.last>=20:
+            print('Upload progress:',self.key,self.tell(),'/',self.total,'bytes',flush=True)
+            self.last=time.monotonic()
+        return part
+
 def put_verified(api,bucket,region,key,data,mutable=False):
     print('Uploading:',key,len(data),'bytes',flush=True)
     # A seekable stream lets requests send bounded chunks instead of timing out while writing one huge byte string.
-    api.put_object(Bucket=bucket,Key=key,Body=io.BytesIO(data),CacheControl='no-cache, max-age=0' if mutable else 'public, max-age=31536000, immutable')
+    api.put_object(Bucket=bucket,Key=key,Body=UploadStream(data,key),CacheControl='no-cache, max-age=0' if mutable else 'public, max-age=31536000, immutable')
+    print('Upload complete; checking public download:',key,flush=True)
     url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
     with urllib.request.urlopen(url,timeout=120) as response: actual=response.read()
     if hashlib.sha256(actual).digest()!=hashlib.sha256(data).digest(): raise RuntimeError('Public verification failed: '+key)
@@ -41,9 +52,15 @@ def publish_assets(directory, version, bucket, region, prefix):
         data=(directory/name).read_bytes()
         if hashlib.sha256(data).hexdigest()!=sha:raise ValueError('Asset hash mismatch: '+name)
         files.append((name,data))
-    api=client(bucket,region)
-    for name,data in sorted(files,key=lambda item:len(item[1]))+[('SHA256SUMS.txt',sums.read_bytes())]:
-        put_verified(api,bucket,region,prefix+'/clients/'+version+'/'+name,data)
+    def send(item):
+        name,data=item
+        put_verified(client(bucket,region),bucket,region,prefix+'/clients/'+version+'/'+name,data)
+    # Small patches first; independent large archives can transfer concurrently.
+    for item in sorted(files,key=lambda item:len(item[1])):
+        if len(item[1])<1024*1024: send(item)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+        for result in pool.map(send,[item for item in files if len(item[1])>=1024*1024]): pass
+    send(('SHA256SUMS.txt',sums.read_bytes()))
     print('All client assets verified:',version)
 
 if __name__=='__main__':
