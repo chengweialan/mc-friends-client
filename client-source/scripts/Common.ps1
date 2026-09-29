@@ -1,12 +1,22 @@
-﻿Set-StrictMode -Version Latest
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $script:Root = Split-Path $PSScriptRoot -Parent
 $script:Config = Get-Content (Join-Path $Root 'client.json') -Raw | ConvertFrom-Json
 $script:Java = Join-Path $Root $Config.javaRelativePath
 function Get-Channel {
-    $channelUrl = $Config.channelUrl + '?t=' + [DateTime]::UtcNow.Ticks
-    $channel = Invoke-RestMethod -Uri $channelUrl -TimeoutSec 30 -Headers @{'Cache-Control'='no-cache'}
+    New-Item -ItemType Directory -Force -Path (Join-Path $Root 'state') | Out-Null
+    $channelFile = Join-Path $Root ('state/channel-'+[Guid]::NewGuid().ToString('N')+'.json')
+    try {
+        & $Java '-Dstdout.encoding=UTF-8' '-Dstderr.encoding=UTF-8' '-jar' (Join-Path $Root 'tools/friends-updater.jar') 'channel' $Root $channelFile | ForEach-Object {
+            Write-Host $_
+            Write-ClientProgress 2 '核对服务器版本' ([string]$_)
+        }
+        if ($LASTEXITCODE -ne 0) { throw '无法获取版本清单；请查看日志中的下载地址，稍后重试。' }
+        $channel = Get-Content -LiteralPath $channelFile -Raw -Encoding UTF8 | ConvertFrom-Json
+    } finally {
+        if (Test-Path -LiteralPath $channelFile) { Remove-Item -LiteralPath $channelFile }
+    }
     if ($channel.schema -ne 2 -or $channel.java -ne $Config.javaMajor) { throw 'This release needs a newer client bundle. Ask the server owner.' }
     foreach ($v in @($channel.minecraft, $channel.neoforge)) {
         if ($v -notmatch '^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$') { throw 'Invalid game/loader version.' }
@@ -49,6 +59,8 @@ function Invoke-PackSync($Channel, [string]$GameDir) {
                 Write-ClientProgress 3 '读取整合包清单' '正在连接更新地址；网络较慢时请稍候'
             } elseif ($line -match 'Checking local|Comparing|Validating') {
                 Write-ClientProgress 3 '检查本地文件' '正在比对已安装的模组与配置'
+            } else {
+                Write-ClientProgress 3 '同步模组与配置' $line
             }
         }
         $process.WaitForExit()

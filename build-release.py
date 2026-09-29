@@ -29,6 +29,7 @@ def build(cache, destination):
     ]
     client = destination/'FriendsMC'
     shutil.copytree(ROOT/'client-source', client, ignore=shutil.ignore_patterns('state', 'logs', 'accounts.json', '*.log'))
+    shutil.copy2(ROOT/'download-sources.json',client/'download-sources.json')
     for name,url,sha,folder in files:
         archive = cache/name
         download(url,archive,sha)
@@ -75,6 +76,7 @@ def build(cache, destination):
         for p in sorted((ROOT/'client-source/scripts').glob('*.ps1')):
             z.write(p,'scripts/'+p.name)
         z.write(updater,'tools/friends-updater.jar')
+        z.write(ROOT/'download-sources.json','download-sources.json')
         z.write(ROOT/'UI-UPDATE.md','更新说明.md')
     patch_digest=hashlib.sha256(patch.read_bytes()).hexdigest()
     sums=digest+'  '+archive.name+'\n'+patch_digest+'  '+patch.name+'\n'
@@ -87,6 +89,7 @@ def build(cache, destination):
                 info=zipfile.ZipInfo('FriendsMC/'+name);info.create_system=3;info.external_attr=mode<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,data)
             add('Start.command',(ROOT/'mac-source/Start.command').read_bytes(),0o100755)
             add('tools/friends-updater.jar',updater.read_bytes())
+            add('download-sources.json',(ROOT/'download-sources.json').read_bytes())
             add('templates/servers.dat',(client/'templates/servers.dat').read_bytes())
             add('使用说明.md',(ROOT/'MAC-GUIDE.md').read_bytes())
             add('THIRD-PARTY.json',json.dumps(mac,indent=2).encode())

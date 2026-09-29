@@ -1,0 +1,37 @@
+name: Publish COS update mirror
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cos-mirror-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Verify distribution settings
+        env:
+          COS_BUCKET: ${{ vars.COS_BUCKET }}
+          COS_REGION: ${{ vars.COS_REGION }}
+        run: |
+          test -n "$COS_BUCKET"
+          test -n "$COS_REGION"
+          python3 -c 'import json; assert json.load(open("download-sources.json"))["mirrors"], "Configure download-sources.json before publishing"'
+      - name: Prepare immutable metadata and approved mod files
+        run: |
+          if test -f mirror-approvals.json; then
+            python3 prepare-mirror.py --output mirror-stage --approvals mirror-approvals.json
+          else
+            python3 prepare-mirror.py --output mirror-stage
+          fi
+      - name: Install COS publisher dependency
+        run: python3 -m pip install 'cos-python-sdk-v5>=1.9,<2'
+      - name: Upload and verify files before switching channel
+        env:
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          COS_BUCKET: ${{ vars.COS_BUCKET }}
+          COS_REGION: ${{ vars.COS_REGION }}
+        run: python3 publish-cos.py --directory mirror-stage --bucket "$COS_BUCKET" --region "$COS_REGION"

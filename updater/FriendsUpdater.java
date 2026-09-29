@@ -22,6 +22,35 @@ public class FriendsUpdater {
     static final String PACK_PATTERN="https://raw\\.githubusercontent\\.com/chengweialan/mc-friends-client/[a-f0-9]{40}/pack/pack\\.toml";
     static Consumer<String> status=System.out::println;
     static final HttpClient HTTP=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(25)).followRedirects(HttpClient.Redirect.NORMAL).build();
+    static List<String> mirrors=List.of();
+    interface Check { void verify(byte[] data)throws Exception; }
+    static void loadSources(Path root)throws Exception{
+        Path file=root.resolve("download-sources.json");if(!Files.exists(file)){mirrors=List.of();return;}
+        Map<String,Object> config=read(file);List<String> bases=new ArrayList<>();
+        for(Object value:list(config.get("mirrors"))){String base=str(value).replaceAll("/+$","");URI u=URI.create(base);
+            if(!"https".equals(u.getScheme())||u.getHost()==null||u.getUserInfo()!=null||u.getQuery()!=null||u.getFragment()!=null||!u.normalize().equals(u))throw new IOException("下载源必须为无查询参数的 HTTPS 地址");
+            bases.add(base);
+        }mirrors=List.copyOf(bases);
+    }
+    static List<String> sources(String original,String relative){
+        List<String> urls=new ArrayList<>();for(String base:mirrors)urls.add(base+"/"+relative);urls.add(original);return urls;
+    }
+    static byte[] fetchChecked(List<String> urls,Check check)throws Exception{
+        List<String> failures=new ArrayList<>();
+        // Try every source before retrying the failed set, so an unavailable primary does not monopolize the wait.
+        for(int round=1;round<=3;round++){
+            for(String url:urls){
+                status.accept("下载源 "+URI.create(url).getHost()+"（第 "+round+"/3 轮）");
+                try{byte[] data=fetch(url);check.verify(data);return data;}
+                catch(IOException|RuntimeException e){failures.add(url+" — "+e.getMessage());status.accept("连接或校验失败，正在尝试其他下载源。");}
+            }
+            if(round<3)Thread.sleep(round*1000L);
+        }
+        throw new IOException("所有下载源均失败，游戏未启动。请重试或联系服主。\n"+String.join("\n",failures));
+    }
+    static byte[] checkedFile(List<String> urls,String sha,long size)throws Exception{
+        return fetchChecked(urls,b->{if((size>=0&&b.length!=size)||!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(b)).equals(sha))throw new IOException("文件 SHA-256 或长度不匹配");});
+    }
     static Map<String,Object> obj(Object x){return (Map<String,Object>)x;}
     static List<Object> list(Object x){return (List<Object>)x;}
     static String str(Object x){return Objects.toString(x,"");}
@@ -39,15 +68,20 @@ public class FriendsUpdater {
         HttpResponse<byte[]> r=HTTP.send(req,HttpResponse.BodyHandlers.ofByteArray());if(r.statusCode()!=200)throw new IOException("HTTP "+r.statusCode()+": "+url);return r.body();
     }
     static Map<String,Object> channel()throws Exception{
-        Map<String,Object> c=obj(Json.parse(new String(fetch(CHANNEL+"?t="+System.currentTimeMillis()),StandardCharsets.UTF_8)));
+        String suffix="?t="+System.currentTimeMillis();
+        byte[] data=fetchChecked(sources(CHANNEL+suffix,"channel.json"+suffix),b->validateChannel(obj(Json.parse(new String(b,StandardCharsets.UTF_8)))));
+        return obj(Json.parse(new String(data,StandardCharsets.UTF_8)));
+    }
+    static void validateChannel(Map<String,Object> c)throws IOException{
         if(((Number)c.get("schema")).intValue()!=2||((Number)c.get("java")).intValue()!=25)throw new IOException("请下载新的客户端压缩包 / Client update required");
         if(!str(c.get("packUrl")).matches(PACK_PATTERN))throw new IOException("清单地址不是固定发布版本");
         for(String k:List.of("minecraft","neoforge"))if(!str(c.get(k)).matches("[A-Za-z0-9][A-Za-z0-9._-]{0,79}"))throw new IOException("Invalid version");
-        return c;
+        if(!str(c.get("catalogSha256")).matches("[a-f0-9]{64}"))throw new IOException("Invalid catalog hash");
     }
     static Map<String,Object> catalog(String packUrl,String expected)throws Exception{
         if(!packUrl.matches(PACK_PATTERN))throw new IOException("Invalid immutable pack URL");
-        byte[] b=fetch(packUrl.replace("pack.toml","mods.lock.json"));
+        String commit=packUrl.split("/")[5];
+        byte[] b=checkedFile(sources(packUrl.replace("pack.toml","mods.lock.json"),"releases/"+commit+"/pack/mods.lock.json"),expected,-1);
         String actual=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(b));
         if(!actual.equals(expected))throw new IOException("模组清单校验失败");
         Map<String,Object> c=obj(Json.parse(new String(b,StandardCharsets.UTF_8)));validate(c);return c;
@@ -126,7 +160,7 @@ public class FriendsUpdater {
                 status.accept("("+(++count)+"/"+selected.size()+") 检查 / 下载 "+m.get("name"));
                 if(Files.exists(dst)&&hash(dst).equals(sha))continue;
                 if(!Files.exists(cached)||!hash(cached).equals(sha)){
-                    byte[] b=fetch(str(m.get("url")));if(b.length!=((Number)m.get("size")).longValue()||!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(b)).equals(sha))throw new IOException("下载校验失败："+name);atomic(cached,b);
+                    byte[] b=checkedFile(sources(str(m.get("url")),"mods/"+sha+".jar"),sha,((Number)m.get("size")).longValue());atomic(cached,b);
                 }
             }
             Set<String> affected=new LinkedHashSet<>();
@@ -202,6 +236,8 @@ public class FriendsUpdater {
         try{
             if(args.length<2)throw new IOException("Usage: mac ROOT | sync ROOT GAMEDIR PACKURL SHA256 | test ROOT GAMEDIR CATALOG [minimal]");
             Path root=Path.of(args[1]).toAbsolutePath().normalize();
+            loadSources(root);
+            if(args[0].equals("channel")){write(Path.of(args[2]).toAbsolutePath(),channel());return;}
             if(args[0].equals("mac")){macUi(root,args.length>2&&args[2].equals("--prepare-only"));return;}
             Path game=Path.of(args[2]).toAbsolutePath().normalize();checkRunning(root,game);
             boolean test=args[0].equals("test");Map<String,Object> cat=test?read(Path.of(args[3])):catalog(args[3],args[4]);validate(cat);
