@@ -41,6 +41,16 @@ def publish(directory, bucket, region, prefix):
     files=sorted(p for p in directory.rglob('*') if p.is_file() and p!=channel)
     for file in files+[channel]:
         key=prefix+'/'+file.relative_to(directory).as_posix();data=file.read_bytes()
+        # Reuse previously uploaded immutable single-PUT objects; clients still
+        # verify their catalog SHA-256. Avoid re-uploading every mod on pack edits.
+        if file.parent!=directory:
+            url='https://'+bucket+'.cos.'+region+'.myqcloud.com/'+urllib.parse.quote(key,safe='/')
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url,method='HEAD'),timeout=20) as response:
+                    if int(response.headers.get('Content-Length','-1'))==len(data) and response.headers.get('ETag','').strip('"')==hashlib.md5(data).hexdigest():
+                        print('Unchanged:',key,flush=True)
+                        continue
+            except (OSError,ValueError): pass
         put_verified(api,bucket,region,key,data,mutable=file==channel or file.parent==directory)
 
 def publish_assets(directory, version, bucket, region, prefix):
@@ -68,4 +78,3 @@ if __name__=='__main__':
     if not a.prefix or any(x in ('','..','.') for x in a.prefix.split('/')):raise ValueError('Invalid prefix')
     if a.assets:publish_assets(a.assets,a.client_version,a.bucket,a.region,a.prefix)
     else:publish(a.directory,a.bucket,a.region,a.prefix)
-
