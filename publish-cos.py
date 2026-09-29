@@ -6,7 +6,11 @@ from pathlib import Path
 
 def client(bucket,region):
     from qcloud_cos import CosConfig, CosS3Client
-    return CosS3Client(CosConfig(Region=region,SecretId=os.environ['COS_SECRET_ID'],SecretKey=os.environ['COS_SECRET_KEY'],Token=os.environ.get('COS_SESSION_TOKEN'),Scheme='https'))
+    secret_id=os.environ['COS_SECRET_ID'].strip();secret_key=os.environ['COS_SECRET_KEY'].strip()
+    if not secret_id or not secret_key:raise ValueError('COS_SECRET_ID or COS_SECRET_KEY is empty')
+    if any(c.isspace() for c in secret_id+secret_key) or any(c in secret_id+secret_key for c in '\"\''):
+        raise ValueError('COS secrets contain internal whitespace or quotes; paste the raw matching values in GitHub Secrets')
+    return CosS3Client(CosConfig(Region=region,SecretId=secret_id,SecretKey=secret_key,Token=os.environ.get('COS_SESSION_TOKEN'),Scheme='https'))
 
 def put_verified(api,bucket,region,key,data,mutable=False):
     api.put_object(Bucket=bucket,Key=key,Body=data,CacheControl='no-cache, max-age=0' if mutable else 'public, max-age=31536000, immutable')
@@ -45,3 +49,4 @@ if __name__=='__main__':
     if not a.prefix or any(x in ('','..','.') for x in a.prefix.split('/')):raise ValueError('Invalid prefix')
     if a.assets:publish_assets(a.assets,a.client_version,a.bucket,a.region,a.prefix)
     else:publish(a.directory,a.bucket,a.region,a.prefix)
+
