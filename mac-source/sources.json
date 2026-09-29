@@ -1,0 +1,17 @@
+{
+  "prism": {
+    "url": "https://github.com/PrismLauncher/PrismLauncher/releases/download/11.1.1/PrismLauncher-macOS-11.1.1.zip",
+    "sha256": "15126a7df57acb4f37fe581dad68cb03c7bb60b70eb82345f8bb3246235600c6",
+    "filename": "PrismLauncher-macOS-11.1.1.zip"
+  },
+  "arm": {
+    "url": "https://cdn.azul.com/zulu/bin/zulu25.36.205-ca-jre25.0.4.1-macosx_aarch64.tar.gz",
+    "sha256": "1071ba0b99c46368927e4085d610271e82998767985cb9cf0318a6b673885eb8",
+    "filename": "zulu25.36.205-ca-jre25.0.4.1-macosx_aarch64.tar.gz"
+  },
+  "x86": {
+    "url": "https://cdn.azul.com/zulu/bin/zulu25.36.205-ca-jre25.0.4.1-macosx_x64.tar.gz",
+    "sha256": "9b4295a4e77fb244dea44db3c6e9036ea35420db2d5a5be069b9ecc4888ee58b",
+    "filename": "zulu25.36.205-ca-jre25.0.4.1-macosx_x64.tar.gz"
+  }
+}

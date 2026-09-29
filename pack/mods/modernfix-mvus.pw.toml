@@ -1,0 +1,17 @@
+name = "现代化修复 mVUS"
+filename = "modernfix-neoforge-5.27.23+mc26.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/TjSm1wrD/versions/Zhz94Fcg/modernfix-neoforge-5.27.23%2Bmc26.3.jar"
+hash-format = "sha256"
+hash = "6bc75a67e025f01aff8c2f00344fbb497f7f7ac94e33195f6788ba59b97f48f1"
+
+[update.modrinth]
+mod-id = "TjSm1wrD"
+version = "Zhz94Fcg"
+
+[option]
+optional = true
+default = true
+description = "社区维护分支；优化与兼容性修复"

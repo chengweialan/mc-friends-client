@@ -1,0 +1,17 @@
+name = "Xaero 世界地图"
+filename = "xaeroworldmap-neoforge-26.3-1.46.4.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/NcUtCpym/versions/dLK8qn7v/xaeroworldmap-neoforge-26.3-1.46.4.jar"
+hash-format = "sha256"
+hash = "10c96ee42a48a2d9f80634c63b128c74e8e96161730797df7d1bf72470a0d1d2"
+
+[update.modrinth]
+mod-id = "NcUtCpym"
+version = "dLK8qn7v"
+
+[option]
+optional = true
+default = true
+description = "记录并查看探索过的世界"

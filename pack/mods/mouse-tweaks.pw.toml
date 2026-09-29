@@ -1,0 +1,17 @@
+name = "鼠标手势"
+filename = "MouseTweaks-neoforge-mc26.3-2.31.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/aC3cM3Vq/versions/f4tPRGDq/MouseTweaks-neoforge-mc26.3-2.31.jar"
+hash-format = "sha256"
+hash = "e9ec08badec2e36f875a6b001b456284a40e337f6f224e85c7373770bce8103f"
+
+[update.modrinth]
+mod-id = "aC3cM3Vq"
+version = "f4tPRGDq"
+
+[option]
+optional = true
+default = true
+description = "拖动和滚轮快速转移物品"

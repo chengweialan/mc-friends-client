@@ -1,0 +1,433 @@
+{
+  "schema": 1,
+  "release": "0.4.0",
+  "minecraft": "26.3",
+  "neoforge": "26.3.0.26-beta",
+  "mods": [
+    {
+      "id": "corpse",
+      "name": "死亡尸体",
+      "description": "死亡后回到尸体取回物品",
+      "required": true,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-1.1.19+26.3",
+      "projectId": "WrpuIfhw",
+      "versionId": "ascfhEE7",
+      "filename": "corpse-neoforge-1.1.19+26.3.jar",
+      "url": "https://cdn.modrinth.com/data/WrpuIfhw/versions/ascfhEE7/corpse-neoforge-1.1.19%2B26.3.jar",
+      "sha256": "c8d817d184af3ab02f782da435177bb15c8c4e8282152fe1e755c9663483c33a",
+      "size": 252344,
+      "modIds": [
+        "corpse"
+      ],
+      "source": "https://modrinth.com/mod/corpse"
+    },
+    {
+      "id": "carry-on",
+      "name": "搬运 Carry On",
+      "description": "空手搬运允许的方块与生物",
+      "required": true,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "2.12.0",
+      "projectId": "joEfVgkn",
+      "versionId": "EQXsdrdI",
+      "filename": "carryon-neoforge-26.3-2.12.0.jar",
+      "url": "https://cdn.modrinth.com/data/joEfVgkn/versions/EQXsdrdI/carryon-neoforge-26.3-2.12.0.jar",
+      "sha256": "5e966771a3a1b21597e635c03fdbeb929e7f579d533f6cf48e193a4007832e22",
+      "size": 376937,
+      "modIds": [
+        "carryon"
+      ],
+      "source": "https://modrinth.com/mod/carry-on"
+    },
+    {
+      "id": "trade-cycling",
+      "name": "交易刷新",
+      "description": "刷新尚未锁定的村民交易",
+      "required": true,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-1.0.22+26.3",
+      "projectId": "qpPoAL6m",
+      "versionId": "eYmTi0EJ",
+      "filename": "trade-cycling-neoforge-1.0.22+26.3.jar",
+      "url": "https://cdn.modrinth.com/data/qpPoAL6m/versions/eYmTi0EJ/trade-cycling-neoforge-1.0.22%2B26.3.jar",
+      "sha256": "7e53e5d40f34a2b35641c8a803597c7afc3afeb496369e99e1e1bc9c4cd5f91e",
+      "size": 86680,
+      "modIds": [
+        "trade_cycling"
+      ],
+      "source": "https://modrinth.com/mod/trade-cycling"
+    },
+    {
+      "id": "simple-voice-chat",
+      "name": "简单语音",
+      "description": "近距离与无距离群组语音；需要麦克风权限",
+      "required": false,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-2.6.24+26.3",
+      "projectId": "9eGKb6K1",
+      "versionId": "3rpCvvMZ",
+      "filename": "voicechat-neoforge-2.6.24+26.3.jar",
+      "url": "https://cdn.modrinth.com/data/9eGKb6K1/versions/3rpCvvMZ/voicechat-neoforge-2.6.24%2B26.3.jar",
+      "sha256": "adf4598770b12bd96bff99758e9bbd2a763ef161c9f93afe2d680887b66c37bb",
+      "size": 4941037,
+      "modIds": [
+        "voicechat",
+        "voicechat_api"
+      ],
+      "source": "https://modrinth.com/mod/simple-voice-chat"
+    },
+    {
+      "id": "xaeros-minimap",
+      "name": "Xaero 小地图",
+      "description": "地图、导航点与死亡位置",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-26.3-26.5.3",
+      "projectId": "1bokaNcj",
+      "versionId": "6zzKPjLq",
+      "filename": "xaerominimap-neoforge-26.3-26.5.3.jar",
+      "url": "https://cdn.modrinth.com/data/1bokaNcj/versions/6zzKPjLq/xaerominimap-neoforge-26.3-26.5.3.jar",
+      "sha256": "a4e19be66faf641316dc3aaa4df76452fcbc4ac4987367ec13945c55055cba3a",
+      "size": 2178209,
+      "modIds": [
+        "xaerominimap"
+      ],
+      "source": "https://modrinth.com/mod/xaeros-minimap"
+    },
+    {
+      "id": "xaeros-world-map",
+      "name": "Xaero 世界地图",
+      "description": "记录并查看探索过的世界",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-26.3-1.46.4",
+      "projectId": "NcUtCpym",
+      "versionId": "dLK8qn7v",
+      "filename": "xaeroworldmap-neoforge-26.3-1.46.4.jar",
+      "url": "https://cdn.modrinth.com/data/NcUtCpym/versions/dLK8qn7v/xaeroworldmap-neoforge-26.3-1.46.4.jar",
+      "sha256": "10c96ee42a48a2d9f80634c63b128c74e8e96161730797df7d1bf72470a0d1d2",
+      "size": 1448991,
+      "modIds": [
+        "xaeroworldmap"
+      ],
+      "source": "https://modrinth.com/mod/xaeros-world-map"
+    },
+    {
+      "id": "jei",
+      "name": "JEI 物品配方",
+      "description": "搜索物品、配方与用途",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [
+        "mezzconfig"
+      ],
+      "version": "31.7.0.47",
+      "projectId": "u6dRKJwZ",
+      "versionId": "Bf7SFkZo",
+      "filename": "jei-26.3-neoforge-31.7.0.47.jar",
+      "url": "https://cdn.modrinth.com/data/u6dRKJwZ/versions/Bf7SFkZo/jei-26.3-neoforge-31.7.0.47.jar",
+      "sha256": "df513a5e4851d21dbc06372fea084d213d0294bdedc2e0a8b602d604e23fd66b",
+      "size": 2374170,
+      "modIds": [
+        "jei"
+      ],
+      "source": "https://modrinth.com/mod/jei"
+    },
+    {
+      "id": "jade",
+      "name": "Jade 玉",
+      "description": "显示准星所指方块和生物的信息",
+      "required": false,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "26.3.1+neoforge",
+      "projectId": "nvQzSEkH",
+      "versionId": "bzrrwapQ",
+      "filename": "Jade-mc26.3-NeoForge-26.3.1.jar",
+      "url": "https://cdn.modrinth.com/data/nvQzSEkH/versions/bzrrwapQ/Jade-mc26.3-NeoForge-26.3.1.jar",
+      "sha256": "07b1660aa3df07b228f3b2ff5614504498386b7d70151b36631aed369468ae78",
+      "size": 1030902,
+      "modIds": [
+        "jade"
+      ],
+      "source": "https://modrinth.com/mod/jade"
+    },
+    {
+      "id": "mouse-tweaks",
+      "name": "鼠标手势",
+      "description": "拖动和滚轮快速转移物品",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "26.3-2.31-neoforge",
+      "projectId": "aC3cM3Vq",
+      "versionId": "f4tPRGDq",
+      "filename": "MouseTweaks-neoforge-mc26.3-2.31.jar",
+      "url": "https://cdn.modrinth.com/data/aC3cM3Vq/versions/f4tPRGDq/MouseTweaks-neoforge-mc26.3-2.31.jar",
+      "sha256": "e9ec08badec2e36f875a6b001b456284a40e337f6f224e85c7373770bce8103f",
+      "size": 74133,
+      "modIds": [
+        "mousetweaks"
+      ],
+      "source": "https://modrinth.com/mod/mouse-tweaks"
+    },
+    {
+      "id": "inventory-profiles-next",
+      "name": "背包整理",
+      "description": "整理背包与箱子，可配置自动补充",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [
+        "libipn"
+      ],
+      "version": "neoforge-26.3-2.3.8",
+      "projectId": "O7RBXm3n",
+      "versionId": "5gXp3J2W",
+      "filename": "InventoryProfilesNext-neoforge-26.3-2.3.8.jar",
+      "url": "https://cdn.modrinth.com/data/O7RBXm3n/versions/5gXp3J2W/InventoryProfilesNext-neoforge-26.3-2.3.8.jar",
+      "sha256": "5412a1b09a7749995bada42d39182c56713a870f928fa339cff113a05fa908de",
+      "size": 1444212,
+      "modIds": [
+        "inventoryprofilesnext"
+      ],
+      "source": "https://modrinth.com/mod/inventory-profiles-next"
+    },
+    {
+      "id": "lambdynamiclights",
+      "name": "动态光源",
+      "description": "手持火把照亮附近；会增加客户端渲染负担",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "4.13.0+26.3",
+      "projectId": "yBW8D80W",
+      "versionId": "rylKnJ4M",
+      "filename": "lambdynamiclights-4.13.0+26.3.jar",
+      "url": "https://cdn.modrinth.com/data/yBW8D80W/versions/rylKnJ4M/lambdynamiclights-4.13.0%2B26.3.jar",
+      "sha256": "b7550288423affed86370acd80d064876d7e256f5489461b7ff7941627552ab2",
+      "size": 1345715,
+      "modIds": [
+        "lambdynlights"
+      ],
+      "source": "https://modrinth.com/mod/lambdynamiclights"
+    },
+    {
+      "id": "appleskin",
+      "name": "苹果皮",
+      "description": "显示饱和度与食物恢复预览",
+      "required": false,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "3.0.10+mc26.3",
+      "projectId": "EsAfCjCV",
+      "versionId": "6vok7cLb",
+      "filename": "appleskin-neoforge-mc26.3-3.0.10.jar",
+      "url": "https://cdn.modrinth.com/data/EsAfCjCV/versions/6vok7cLb/appleskin-neoforge-mc26.3-3.0.10.jar",
+      "sha256": "1b12ae7b7f129821957c33c6efee0ff1da25af1c4ed8b1f1fa112f41244928e7",
+      "size": 80755,
+      "modIds": [
+        "appleskin"
+      ],
+      "source": "https://modrinth.com/mod/appleskin"
+    },
+    {
+      "id": "better-climbing",
+      "name": "更好的攀爬",
+      "description": "改善梯子、藤蔓攀爬速度",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "6-neoforge",
+      "projectId": "ZucWZEBV",
+      "versionId": "zj0JIAF8",
+      "filename": "better_climbing-neoforge-6.jar",
+      "url": "https://cdn.modrinth.com/data/ZucWZEBV/versions/zj0JIAF8/better_climbing-neoforge-6.jar",
+      "sha256": "cded35b274b92fad742c4a7b87ae05b9bba2aa30efa6b00a454f1a4e90033e57",
+      "size": 7175,
+      "modIds": [
+        "better_climbing"
+      ],
+      "source": "https://modrinth.com/mod/better-climbing"
+    },
+    {
+      "id": "enchantment-descriptions",
+      "name": "附魔描述",
+      "description": "显示附魔效果说明",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [
+        "prickle"
+      ],
+      "version": "26.3.0.2",
+      "projectId": "UVtY3ZAC",
+      "versionId": "LgjUQBfn",
+      "filename": "EnchantmentDescriptions-neoforge-MC26.3-26.3.0.2.jar",
+      "url": "https://cdn.modrinth.com/data/UVtY3ZAC/versions/LgjUQBfn/EnchantmentDescriptions-neoforge-MC26.3-26.3.0.2.jar",
+      "sha256": "bd321d6cb2af7051dccca5292f4e02cdc40d6f8a63262fae75fd9162fdb65b8a",
+      "size": 79813,
+      "modIds": [
+        "enchdesc"
+      ],
+      "source": "https://modrinth.com/mod/enchantment-descriptions"
+    },
+    {
+      "id": "modernfix-mvus",
+      "name": "现代化修复 mVUS",
+      "description": "社区维护分支；优化与兼容性修复",
+      "required": false,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "5.27.23+mc26.3",
+      "projectId": "TjSm1wrD",
+      "versionId": "Zhz94Fcg",
+      "filename": "modernfix-neoforge-5.27.23+mc26.3.jar",
+      "url": "https://cdn.modrinth.com/data/TjSm1wrD/versions/Zhz94Fcg/modernfix-neoforge-5.27.23%2Bmc26.3.jar",
+      "sha256": "6bc75a67e025f01aff8c2f00344fbb497f7f7ac94e33195f6788ba59b97f48f1",
+      "size": 490059,
+      "modIds": [
+        "modernfix"
+      ],
+      "source": "https://modrinth.com/mod/modernfix-mvus"
+    },
+    {
+      "id": "mezzconfig",
+      "name": "MezzConfig 前置库",
+      "description": "JEI 依赖，自动安装",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": true,
+      "default": true,
+      "dependencies": [],
+      "version": "0.6.5",
+      "projectId": "7tEfOcA7",
+      "versionId": "lxhKg8ZN",
+      "filename": "mezz_config-26.3-neoforge-0.6.5.jar",
+      "url": "https://cdn.modrinth.com/data/7tEfOcA7/versions/lxhKg8ZN/mezz_config-26.3-neoforge-0.6.5.jar",
+      "sha256": "20d81262a69f8a9745d91038405e7185180e841216bee380276d9a86f3a49b23",
+      "size": 346676,
+      "modIds": [
+        "mezz_config"
+      ],
+      "source": "https://modrinth.com/mod/mezzconfig"
+    },
+    {
+      "id": "libipn",
+      "name": "libIPN 前置库",
+      "description": "背包整理依赖，自动安装",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": true,
+      "default": true,
+      "dependencies": [],
+      "version": "neoforge-26.3-6.9.0",
+      "projectId": "onSQdWhM",
+      "versionId": "gMDIlFM0",
+      "filename": "libIPN-neoforge-26.3-6.9.0.jar",
+      "url": "https://cdn.modrinth.com/data/onSQdWhM/versions/gMDIlFM0/libIPN-neoforge-26.3-6.9.0.jar",
+      "sha256": "49bd1a8f96720c9bc21b0db67047657d9f57667dbf20d09a7466a0349b51a99c",
+      "size": 7774399,
+      "modIds": [
+        "libipn"
+      ],
+      "source": "https://modrinth.com/mod/libipn"
+    },
+    {
+      "id": "prickle",
+      "name": "Prickle 前置库",
+      "description": "附魔描述依赖，自动安装",
+      "required": false,
+      "server": false,
+      "client": true,
+      "hidden": true,
+      "default": true,
+      "dependencies": [],
+      "version": "26.3.0.2",
+      "projectId": "aaRl8GiW",
+      "versionId": "DeR1vFsN",
+      "filename": "PrickleMC-neoforge-MC26.3-26.3.0.2.jar",
+      "url": "https://cdn.modrinth.com/data/aaRl8GiW/versions/DeR1vFsN/PrickleMC-neoforge-MC26.3-26.3.0.2.jar",
+      "sha256": "e89766f7b4a75d3bd828aadd56479a0ec674cc23cf60e66b6fe95a98b9bbefd8",
+      "size": 82319,
+      "modIds": [
+        "prickle"
+      ],
+      "source": "https://modrinth.com/mod/prickle"
+    }
+  ],
+  "unavailable": [
+    {
+      "name": "垃圾槽 TrashSlot",
+      "reason": "26.3 文件存在，但 Balm 26.3.0.2 在 NeoForge 26.3.0.26-beta 隔离测试触发 AbstractMethodError，暂不安装"
+    },
+    {
+      "name": "旅人标题 Traveler's Titles",
+      "reason": "未找到 26.3 NeoForge 发布版本"
+    },
+    {
+      "name": "流畅加载重置版 Smooth Boot (Reloaded)",
+      "reason": "未找到 26.3 NeoForge 发布版本"
+    },
+    {
+      "name": "更多箱子（按 Iron Chests / Sophisticated Storage 检查）",
+      "reason": "未找到 26.3 NeoForge 发布版本"
+    },
+    {
+      "name": "自动汉化更新 I18nUpdateMod",
+      "reason": "未找到 26.3 NeoForge 发布版本；保留模组内置中文，不强装旧版"
+    }
+  ]
+}

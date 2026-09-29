@@ -1,0 +1,17 @@
+name = "动态光源"
+filename = "lambdynamiclights-4.13.0+26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/yBW8D80W/versions/rylKnJ4M/lambdynamiclights-4.13.0%2B26.3.jar"
+hash-format = "sha256"
+hash = "b7550288423affed86370acd80d064876d7e256f5489461b7ff7941627552ab2"
+
+[update.modrinth]
+mod-id = "yBW8D80W"
+version = "rylKnJ4M"
+
+[option]
+optional = true
+default = true
+description = "手持火把照亮附近；会增加客户端渲染负担"

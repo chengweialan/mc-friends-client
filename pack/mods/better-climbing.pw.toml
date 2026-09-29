@@ -1,0 +1,17 @@
+name = "更好的攀爬"
+filename = "better_climbing-neoforge-6.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/ZucWZEBV/versions/zj0JIAF8/better_climbing-neoforge-6.jar"
+hash-format = "sha256"
+hash = "cded35b274b92fad742c4a7b87ae05b9bba2aa30efa6b00a454f1a4e90033e57"
+
+[update.modrinth]
+mod-id = "ZucWZEBV"
+version = "zj0JIAF8"
+
+[option]
+optional = true
+default = true
+description = "改善梯子、藤蔓攀爬速度"

@@ -1,36 +1,23 @@
-# Friends MC
+# Friends MC — Windows / macOS
 
-MC 26.3 / NeoForge 26.3.0.26-beta / Java 25。默认官方 PCL 2.13.1.1，零额外模组。
+当前发布：0.4.0。Minecraft 26.3，NeoForge 26.3.0.26-beta，Java 25。
 
-## 发布顺序
+- Windows：PCL2 + Start.cmd；已有用户下载 UI 更新补丁覆盖。
+- macOS：Prism Launcher + Start.command；分别提供 Apple Silicon 和 Intel 包。
+- 两端共用 `pack/mods.lock.json`，固定模组文件与 SHA-256；`build-pack.py` 生成 packwiz 元数据。
+- 必装与可选模组清单见 [MOD-STATUS.md](MOD-STATUS.md)，Mac 操作见 [MAC-GUIDE.md](MAC-GUIDE.md)。
+- 更新前关闭游戏与启动器；更新窗口可重新选择辅助模组。个人配置和非托管模组保留。
+- 当前仓库不发布 Minecraft 游戏本体、账号、世界存档或私钥。游戏由启动器从正规源下载。
 
-1. 在维护机安装 packwiz，进入 `pack/` 管理模组；区分 client/server/both。
-2. 更新清单并 `packwiz refresh`，测试客户端和备份后的测试服务端。
-3. 提交 `pack/`，取得完整 40 位提交 SHA。
-4. 将 channel.template.json 复制为 channel.json，packUrl 填写：
-   `https://raw.githubusercontent.com/chengweialan/mc-friends-client/<SHA>/pack/pack.toml`。
-5. 正式服务端停服备份并部署相同清单，确认成功后再提交 channel.json。
-6. 玩家启动时跟随 channel.json 指向的不可变提交。不要指向 main 下的 pack.toml。
+## 维护流程
 
-玩家请从 [Releases](https://github.com/chengweialan/mc-friends-client/releases) 下载便携包，参考 [玩家说明](PLAYER-GUIDE.md)。
-`channel.json` 指向已验证的不可变 pack 提交；不要将模板中的占位地址作为正式地址。
-服务器不自动追随 main，也不由客户端更新脚本启动或升级。
-回滚世界需恢复备份；仅回退模组清单不等于安全回滚世界。
-不提交账号凭据、世界存档、Java/Minecraft 二进制文件及服务器私钥。
-受管理配置可能覆盖玩家修改，因此不要收录 options.txt、地图标记等个人文件。
+1. 更新 mods.lock.json 中经过测试的版本、下载 URL、哈希和依赖，执行 `python3 build-pack.py`。
+2. 对服务端组合做隔离启动测试，确认 Done；测试客户端的可选项增删与前置依赖。
+3. 先提交清单，再让 channel.json 的 packUrl 指向该不可变 commit，同时更新 catalogSha256 与 release。不要让 packUrl 指向 main。
+4. 修改 channel.json 会触发同一工作流，构建 Windows、macOS arm64 和 macOS x64；统一发布到一个 GitHub Release。
+5. 若更新器本身改变，旧用户安装 UI 更新补丁；日常模组更新只需运行 Start。
 
-## 客户端
+Java 更新器源码位于 updater/，构建时使用 javac --release 17 编译，运行时使用包内 Java 25。只管理清单中的 JAR；删除/替换前备份，下载失败不进入提交阶段，中断的事务下次启动恢复。备份位于实例 .friends-sync/backup-*，可在确认更新稳定后手工归档。
 
-client-source 内是客户端启动/更新脚本；二进制下载来源与校验值见 client-source/THIRD-PARTY.json。
-更新器固定为 packwiz-installer 0.5.14，bootstrap 0.0.3，不动态下载新的更新器代码。
-版本变更通过 PCL 自动导入 modpack.mrpack 建立新实例；Java 大版本变化要求新客户端包。
-Start.cmd 在打开 PCL 前同步，未使用无法阻断失败的 PCL 启动前命令。复用 PCL 窗口或直接启动 PCL 会绕过同步，发布升级时需通知好友关闭游戏/PCL 并重新运行 Start.cmd。
+最低启动器协议 schema=2，旧版 0.3.0 会拒绝新渠道并提示升级，避免漏装必装模组。
 
-PCL 程序保持官方原样，作者龙腾猫跃；下载与说明：https://meloong.com/pcl 。此仓库不是 PCL 官方整合包。
-
-## 构建
-
-安装 Python 3.11+，执行 `python build-release.py`，输出到新的 `dist/` 目录。
-脚本下载固定版本组件并校验 SHA-256，保留许可文件，不包含 Minecraft 本体或账号数据。
-`channel.json` 在 main 更新时，GitHub Actions 自动构建并创建 Releases 下载；release 字段应使用新的版本号，避免覆盖已发布版本。
-构建前自动验证发布清单的版本与索引校验值。实际游戏启动仍需用户登录验收。

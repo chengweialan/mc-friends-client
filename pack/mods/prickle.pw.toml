@@ -1,0 +1,12 @@
+name = "Prickle 前置库"
+filename = "PrickleMC-neoforge-MC26.3-26.3.0.2.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/aaRl8GiW/versions/DeR1vFsN/PrickleMC-neoforge-MC26.3-26.3.0.2.jar"
+hash-format = "sha256"
+hash = "e89766f7b4a75d3bd828aadd56479a0ec674cc23cf60e66b6fe95a98b9bbefd8"
+
+[update.modrinth]
+mod-id = "aaRl8GiW"
+version = "DeR1vFsN"

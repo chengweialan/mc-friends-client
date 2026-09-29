@@ -1,0 +1,17 @@
+name = "附魔描述"
+filename = "EnchantmentDescriptions-neoforge-MC26.3-26.3.0.2.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/UVtY3ZAC/versions/LgjUQBfn/EnchantmentDescriptions-neoforge-MC26.3-26.3.0.2.jar"
+hash-format = "sha256"
+hash = "bd321d6cb2af7051dccca5292f4e02cdc40d6f8a63262fae75fd9162fdb65b8a"
+
+[update.modrinth]
+mod-id = "UVtY3ZAC"
+version = "LgjUQBfn"
+
+[option]
+optional = true
+default = true
+description = "显示附魔效果说明"

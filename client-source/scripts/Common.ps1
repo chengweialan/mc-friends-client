@@ -7,7 +7,7 @@ $script:Java = Join-Path $Root $Config.javaRelativePath
 function Get-Channel {
     $channelUrl = $Config.channelUrl + '?t=' + [DateTime]::UtcNow.Ticks
     $channel = Invoke-RestMethod -Uri $channelUrl -TimeoutSec 30 -Headers @{'Cache-Control'='no-cache'}
-    if ($channel.schema -ne 1 -or $channel.java -ne $Config.javaMajor) { throw 'This release needs a newer client bundle. Ask the server owner.' }
+    if ($channel.schema -ne 2 -or $channel.java -ne $Config.javaMajor) { throw 'This release needs a newer client bundle. Ask the server owner.' }
     foreach ($v in @($channel.minecraft, $channel.neoforge)) {
         if ($v -notmatch '^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$') { throw 'Invalid game/loader version.' }
     }
@@ -31,9 +31,11 @@ function Invoke-PackSync($Channel, [string]$GameDir) {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
-    $bootstrap = Join-Path $Root 'tools/packwiz-installer-bootstrap.jar'
-    $installer = Join-Path $Root 'tools/packwiz-installer.jar'
-    $startInfo.Arguments = '-jar "'+$bootstrap+'" --bootstrap-no-update --bootstrap-main-jar "'+$installer+'" -g -s client "'+$Channel.packUrl+'"'
+    $updater = Join-Path $Root 'tools/friends-updater.jar'
+    if (!(Test-Path -LiteralPath $updater)) { throw 'Download and extract the 0.4.0 client update first.' }
+    $startInfo.StandardOutputEncoding = [Text.Encoding]::UTF8
+    $startInfo.StandardErrorEncoding = [Text.Encoding]::UTF8
+    $startInfo.Arguments = '-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -jar "'+$updater+'" sync "'+$Root+'" "'+$GameDir+'" "'+$Channel.packUrl+'" "'+$Channel.catalogSha256+'"'
     $process = New-Object Diagnostics.Process
     $process.StartInfo = $startInfo
     $process.Start() | Out-Null

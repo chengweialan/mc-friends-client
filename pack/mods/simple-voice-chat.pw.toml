@@ -1,0 +1,17 @@
+name = "简单语音"
+filename = "voicechat-neoforge-2.6.24+26.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/3rpCvvMZ/voicechat-neoforge-2.6.24%2B26.3.jar"
+hash-format = "sha256"
+hash = "adf4598770b12bd96bff99758e9bbd2a763ef161c9f93afe2d680887b66c37bb"
+
+[update.modrinth]
+mod-id = "9eGKb6K1"
+version = "3rpCvvMZ"
+
+[option]
+optional = true
+default = true
+description = "近距离与无距离群组语音；需要麦克风权限"

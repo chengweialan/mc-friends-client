@@ -1,0 +1,17 @@
+name = "JEI 物品配方"
+filename = "jei-26.3-neoforge-31.7.0.47.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/u6dRKJwZ/versions/Bf7SFkZo/jei-26.3-neoforge-31.7.0.47.jar"
+hash-format = "sha256"
+hash = "df513a5e4851d21dbc06372fea084d213d0294bdedc2e0a8b602d604e23fd66b"
+
+[update.modrinth]
+mod-id = "u6dRKJwZ"
+version = "Bf7SFkZo"
+
+[option]
+optional = true
+default = true
+description = "搜索物品、配方与用途"

@@ -1,4 +1,4 @@
-name: Build portable client
+name: Build Windows and macOS clients
 on:
   workflow_dispatch:
   push:
@@ -23,4 +23,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=$(python3 -c 'import json; print(json.load(open("channel.json"))["release"])')
-          gh release create "v$VERSION" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $VERSION (Windows x64)" --notes-file RELEASE-NOTES.md
+          gh release create "v$VERSION" dist/FriendsMC-Windows-x64.zip dist/FriendsMC-UI-Update.zip dist/FriendsMC-macOS-arm64.zip dist/FriendsMC-macOS-x64.zip dist/SHA256SUMS.txt --target "$GITHUB_SHA" --title "Friends MC $VERSION — Windows + macOS" --notes-file RELEASE-NOTES.md

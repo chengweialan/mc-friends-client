@@ -1,0 +1,12 @@
+name = "MezzConfig 前置库"
+filename = "mezz_config-26.3-neoforge-0.6.5.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/7tEfOcA7/versions/lxhKg8ZN/mezz_config-26.3-neoforge-0.6.5.jar"
+hash-format = "sha256"
+hash = "20d81262a69f8a9745d91038405e7185180e841216bee380276d9a86f3a49b23"
+
+[update.modrinth]
+mod-id = "7tEfOcA7"
+version = "lxhKg8ZN"

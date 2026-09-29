@@ -1,3 +1,9 @@
+# 0.4.0 模组更新
+
+每次从 Start.cmd 进入，选择可选模组后同步。必装不能取消；依赖自动安装。关闭游戏与 PCL 后才能再次同步。旧用户先安装 0.4.0 UI 更新补丁（含 tools 文件夹）。
+
+具体模组和未适配项见 MOD-STATUS.md；macOS 使用独立发布包内的 Start.command。
+
 # 好友客户端
 
 适用 Windows 10/11 x64（Intel/AMD）。从 Releases 下载 `FriendsMC-Windows-x64.zip`，完整解压到可写目录，再双击 `FriendsMC/Start.cmd`。

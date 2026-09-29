@@ -1,0 +1,17 @@
+name = "苹果皮"
+filename = "appleskin-neoforge-mc26.3-3.0.10.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/6vok7cLb/appleskin-neoforge-mc26.3-3.0.10.jar"
+hash-format = "sha256"
+hash = "1b12ae7b7f129821957c33c6efee0ff1da25af1c4ed8b1f1fa112f41244928e7"
+
+[update.modrinth]
+mod-id = "EsAfCjCV"
+version = "6vok7cLb"
+
+[option]
+optional = true
+default = true
+description = "显示饱和度与食物恢复预览"

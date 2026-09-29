@@ -1,0 +1,17 @@
+name = "Jade 玉"
+filename = "Jade-mc26.3-NeoForge-26.3.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/nvQzSEkH/versions/bzrrwapQ/Jade-mc26.3-NeoForge-26.3.1.jar"
+hash-format = "sha256"
+hash = "07b1660aa3df07b228f3b2ff5614504498386b7d70151b36631aed369468ae78"
+
+[update.modrinth]
+mod-id = "nvQzSEkH"
+version = "bzrrwapQ"
+
+[option]
+optional = true
+default = true
+description = "显示准星所指方块和生物的信息"

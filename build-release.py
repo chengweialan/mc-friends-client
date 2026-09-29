@@ -1,5 +1,5 @@
 """Build the Windows portable client from pinned upstream archives (Python 3.11+)."""
-import argparse, hashlib, json, os, shutil, struct, urllib.request, zipfile
+import argparse, hashlib, json, os, shutil, struct, urllib.request, zipfile, subprocess, tarfile, stat, copy, posixpath
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -59,6 +59,11 @@ def build(cache, destination):
     for name,url in license_urls.items():
         download(url,client/'licenses'/name)
     shutil.copy2(ROOT/'PLAYER-GUIDE.md',client/'使用说明.md')
+    classes=destination/'updater-classes'
+    classes.mkdir()
+    subprocess.run(['javac','--release','17','-encoding','UTF-8','-d',str(classes),str(ROOT/'updater/FriendsUpdater.java')],check=True)
+    updater=client/'tools/friends-updater.jar'
+    subprocess.run(['jar','--create','--file',str(updater),'--main-class','FriendsUpdater','-C',str(classes),'.'],check=True)
     archive=destination/'FriendsMC-Windows-x64.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=5) as z:
         for p in sorted(client.rglob('*')):
@@ -69,9 +74,45 @@ def build(cache, destination):
         z.write(ROOT/'client-source/Start.cmd','Start.cmd')
         for p in sorted((ROOT/'client-source/scripts').glob('*.ps1')):
             z.write(p,'scripts/'+p.name)
+        z.write(updater,'tools/friends-updater.jar')
         z.write(ROOT/'UI-UPDATE.md','更新说明.md')
     patch_digest=hashlib.sha256(patch.read_bytes()).hexdigest()
-    write(destination/'SHA256SUMS.txt',digest+'  '+archive.name+'\n'+patch_digest+'  '+patch.name+'\n')
+    sums=digest+'  '+archive.name+'\n'+patch_digest+'  '+patch.name+'\n'
+    mac=json.loads((ROOT/'mac-source/sources.json').read_text())
+    for architecture,key in [('arm64','arm'),('x64','x86')]:
+        output=destination/f'FriendsMC-macOS-{architecture}.zip'
+        for src in [mac['prism'],mac[key]]:download(src['url'],cache/src['filename'],src['sha256'])
+        with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED,compresslevel=5) as z:
+            def add(name,data,mode=0o100644):
+                info=zipfile.ZipInfo('FriendsMC/'+name);info.create_system=3;info.external_attr=mode<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,data)
+            add('Start.command',(ROOT/'mac-source/Start.command').read_bytes(),0o100755)
+            add('tools/friends-updater.jar',updater.read_bytes())
+            add('templates/servers.dat',(client/'templates/servers.dat').read_bytes())
+            add('使用说明.md',(ROOT/'MAC-GUIDE.md').read_bytes())
+            add('THIRD-PARTY.json',json.dumps(mac,indent=2).encode())
+            with zipfile.ZipFile(cache/mac['prism']['filename']) as src:
+                for member in src.infolist():
+                    if not member.filename.startswith('Prism Launcher.app/'):continue
+                    assert '..' not in Path(member.filename).parts
+                    info=copy.copy(member);info.filename='FriendsMC/launcher/'+member.filename
+                    z.writestr(info,src.read(member))
+            with tarfile.open(cache/mac[key]['filename']) as src:
+                for member in src.getmembers():
+                    parts=member.name.split('/',1)
+                    if len(parts)<2:continue
+                    relative=parts[1];assert not relative.startswith('/') and '..' not in Path(relative).parts
+                    name='runtime/'+relative
+                    if member.isfile():add(name,src.extractfile(member).read(),stat.S_IFREG|member.mode)
+                    elif member.issym():
+                        target=posixpath.normpath(posixpath.join(posixpath.dirname(name),member.linkname))
+                        assert target.startswith('runtime/') and not member.linkname.startswith('/')
+                        add(name,member.linkname.encode(),stat.S_IFLNK|0o777)
+                    elif member.isdir():add(name.rstrip('/')+'/',b'',stat.S_IFDIR|member.mode)
+                    else:raise RuntimeError('Unexpected Java archive entry: '+member.name)
+            add('licenses/Prism-COPYING.md',urllib.request.urlopen('https://raw.githubusercontent.com/PrismLauncher/PrismLauncher/11.1.1/COPYING.md').read())
+            add('licenses/SOURCE-LINKS.txt',b'Prism Launcher source: https://github.com/PrismLauncher/PrismLauncher/tree/11.1.1\nFriends updater source: https://github.com/chengweialan/mc-friends-client/tree/main/updater\nZulu OpenJDK source: https://www.azul.com/downloads/?package=jdk#zulu\n')
+        sums+=hashlib.sha256(output.read_bytes()).hexdigest()+'  '+output.name+'\n'
+    write(destination/'SHA256SUMS.txt',sums)
     print(f'Built {archive}: {archive.stat().st_size} bytes, SHA256 {digest}')
 
 if __name__=='__main__':

@@ -1,2 +1,91 @@
 hash-format = "sha256"
-files = []
+
+[[files]]
+file = "mods/corpse.pw.toml"
+hash = "7847c637be1847e92a9837d6bac899bad0702fccfd8247016ed1319c78ddb8cb"
+metafile = true
+
+[[files]]
+file = "mods/carry-on.pw.toml"
+hash = "942150e6bf788386ca0aba3f9addf61986dd93818f8fe36e770dfd65d4190826"
+metafile = true
+
+[[files]]
+file = "mods/trade-cycling.pw.toml"
+hash = "690fb3c1014c364c385529381c88296c4ec2439e77aae867af29d7ac346f15a3"
+metafile = true
+
+[[files]]
+file = "mods/simple-voice-chat.pw.toml"
+hash = "2fe90a673d7f1aa5915129a3e11971d0c61621e99d6243d3630216c471e26ff7"
+metafile = true
+
+[[files]]
+file = "mods/xaeros-minimap.pw.toml"
+hash = "a6249cd82b42e687c58c06dcbbb9c1831053e6b12078eb6a51557ca565ea1c42"
+metafile = true
+
+[[files]]
+file = "mods/xaeros-world-map.pw.toml"
+hash = "7667a64756f53a673b94e5bca4f21834cfaa0b697f8226ad2b7e618e1a68501a"
+metafile = true
+
+[[files]]
+file = "mods/jei.pw.toml"
+hash = "d2cec96454081bb1ef42ed2a2610d9c9a51aa748a45ba2ee146293c2c5ce59a2"
+metafile = true
+
+[[files]]
+file = "mods/jade.pw.toml"
+hash = "31750813eef97adf650f8dff2641d6d8154e2a6e30403fdb9e9e73ac1ba7b1e4"
+metafile = true
+
+[[files]]
+file = "mods/mouse-tweaks.pw.toml"
+hash = "eb0af46d098be7210605e4bf16f471f0da9030239ad7621e8b2c0d454377a07b"
+metafile = true
+
+[[files]]
+file = "mods/inventory-profiles-next.pw.toml"
+hash = "b75050e3efa39ffe467a2cd009eb5b94ca91363b4e9050642c86a63233cfc207"
+metafile = true
+
+[[files]]
+file = "mods/lambdynamiclights.pw.toml"
+hash = "edf0cdd5340796e9730005ce9fea4f59b5a8a78102284874edb8209cf70d3528"
+metafile = true
+
+[[files]]
+file = "mods/appleskin.pw.toml"
+hash = "60f07f7a5d4f4f15c83da4fc0f6e54e7a2b3f9ba982fb7741f6718ee0a3f9d89"
+metafile = true
+
+[[files]]
+file = "mods/better-climbing.pw.toml"
+hash = "a6b23efb30284d30557858d51bf7345d1dd11f1ff98e8bd0eb17064c0c3212c6"
+metafile = true
+
+[[files]]
+file = "mods/enchantment-descriptions.pw.toml"
+hash = "a45b04fd44a5c445329d635effdfa68811169befcf99c5bc8ec3fc9d688da57d"
+metafile = true
+
+[[files]]
+file = "mods/modernfix-mvus.pw.toml"
+hash = "5a008eeda9349490e3ef3bce939cb5731deae0c7e7d9532a85561d3b33acf8b9"
+metafile = true
+
+[[files]]
+file = "mods/mezzconfig.pw.toml"
+hash = "c26859d1cb36f4d14ebea73b124ff8818bb8f6f43bd5cc4a3333fda67c2163b9"
+metafile = true
+
+[[files]]
+file = "mods/libipn.pw.toml"
+hash = "487442dd9817b88704089478576a8f85812ad6f128154f44426cac09f1c7bbb2"
+metafile = true
+
+[[files]]
+file = "mods/prickle.pw.toml"
+hash = "f6f62bdef06956691be4c75b98cb7565e652c54283dc894ca48432c8ce7bc15c"
+metafile = true

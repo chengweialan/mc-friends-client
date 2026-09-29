@@ -1,0 +1,17 @@
+name = "Xaero 小地图"
+filename = "xaerominimap-neoforge-26.3-26.5.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/1bokaNcj/versions/6zzKPjLq/xaerominimap-neoforge-26.3-26.5.3.jar"
+hash-format = "sha256"
+hash = "a4e19be66faf641316dc3aaa4df76452fcbc4ac4987367ec13945c55055cba3a"
+
+[update.modrinth]
+mod-id = "1bokaNcj"
+version = "6zzKPjLq"
+
+[option]
+optional = true
+default = true
+description = "地图、导航点与死亡位置"

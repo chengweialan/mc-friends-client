@@ -1,13 +1,20 @@
-默认启动器切换为官方 PCL 2.13.1.1（制作时最新正式版）。Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25，暂无额外模组。
+# Friends MC 0.4.0
 
-0.3.0 添加图形更新窗口：步骤、文件数量进度、耗时、错误详情、复制日志与取消更新。游戏本体下载继续由 PCL 显示。
+Minecraft 26.3 / NeoForge 26.3.0.26-beta / Java 25。
 
-已有 PCL 客户端请下载小型 `FriendsMC-UI-Update.zip`，把 Start.cmd 和 scripts 复制到原 FriendsMC 文件夹并替换同名文件；不会覆盖游戏、Java 或账号文件。新用户下载完整包。
+- Windows 保留 PCL2，新增必装/可选模组选择与记忆功能。
+- 新增 macOS Apple Silicon 与 Intel 客户端，内置 Prism 和对应 Java，双击 Start.command。
+- 两个平台使用同一固定版本清单，下载带 SHA-256 校验，失败中止，未完成事务下次恢复。
+- 保留个人模组、地图、按键与账号，检测重复 mod ID。
+- 3 个共同玩法模组必装，12 个辅助模组可选，3 个前置库自动跟随安装。
+- 语音对外地址 wze.rainplay.cn:51612（UDP），游戏地址仍为 wze.rainplay.cn:21250。
 
-下载 FriendsMC-Windows-x64.zip，完整解压并双击 Start.cmd。首次需要自己的正版 Minecraft 微软账号和联网下载游戏资源。
+## 旧 Windows 用户
 
-首次自动生成 modpack.mrpack，由 PCL 自动导入并下载游戏；随后在 PCL 登录并点击启动。附带 Java 和 packwiz；每次 Start.cmd 同步完成后才打开 PCL。MC 或 NeoForge 变化时准备新实例，旧实例保留。
+下载 FriendsMC-UI-Update.zip，退出游戏和 PCL，解压覆盖原 FriendsMC 文件夹（Start.cmd、scripts、tools）。不删除原来的游戏和账号。随后运行 Start.cmd。旧更新器会提示需要升级，避免绕过新的模组选择流程。
 
-请解压到新目录，不覆盖旧 Prism 客户端。每次游玩先关闭本包的 PCL 与游戏，再运行 Start.cmd；直接运行 PCL 或复用未关闭的 PCL 窗口不会重新检查模组更新。
+## 暂缓的模组
 
-自动更新测试已通过；微软账号登录、图形界面启动和实际联机仍需玩家验收。服务器可能处于关闭状态，测试前联系服主。
+垃圾槽的 Balm 依赖在当前 NeoForge 启动测试崩溃，暂不安装。旅人标题、流畅加载重置版、更多箱子（Iron Chests / Sophisticated Storage）、自动汉化更新未找到 26.3 NeoForge 文件。ModernFix 使用已标明的 mVUS 社区维护分支。详情见 MOD-STATUS.md。
+
+macOS 首次可能需要在隐私与安全性中允许打开，并授予麦克风权限；首次游戏安装仍需联网、登录正版微软账号。
