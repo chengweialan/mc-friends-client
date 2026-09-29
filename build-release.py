@@ -29,6 +29,10 @@ def build(cache, destination):
     ]
     client = destination/'FriendsMC'
     shutil.copytree(ROOT/'client-source', client, ignore=shutil.ignore_patterns('state', 'logs', 'accounts.json', '*.log'))
+    # Windows PowerShell 5 reads BOM-less UTF-8 as the system ANSI code page.
+    # Normalize packaged scripts so Chinese text cannot alter tokenization.
+    for script in client.rglob('*.ps1'):
+        script.write_text(script.read_text(encoding='utf-8-sig'), encoding='utf-8-sig')
     shutil.copy2(ROOT/'download-sources.json',client/'download-sources.json')
     shutil.copy2(ROOT/'MOD-CREDITS.md',client/'MOD-CREDITS.md')
     shutil.copytree(ROOT/'mirror-licenses',client/'licenses/mods')
@@ -75,7 +79,7 @@ def build(cache, destination):
     patch=destination/'FriendsMC-UI-Update.zip'
     with zipfile.ZipFile(patch,'w',zipfile.ZIP_DEFLATED) as z:
         z.write(ROOT/'client-source/Start.cmd','Start.cmd')
-        for p in sorted((ROOT/'client-source/scripts').glob('*.ps1')):
+        for p in sorted((client/'scripts').glob('*.ps1')):
             z.write(p,'scripts/'+p.name)
         z.write(updater,'tools/friends-updater.jar')
         z.write(ROOT/'download-sources.json','download-sources.json')
