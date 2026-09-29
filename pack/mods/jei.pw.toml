@@ -1,6 +1,6 @@
 name = "JEI 物品配方"
 filename = "jei-26.3-neoforge-31.7.0.47.jar"
-side = "client"
+side = "both"
 
 [download]
 url = "https://cdn.modrinth.com/data/u6dRKJwZ/versions/Bf7SFkZo/jei-26.3-neoforge-31.7.0.47.jar"

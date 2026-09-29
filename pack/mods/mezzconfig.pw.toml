@@ -1,6 +1,6 @@
 name = "MezzConfig 前置库"
 filename = "mezz_config-26.3-neoforge-0.6.5.jar"
-side = "client"
+side = "both"
 
 [download]
 url = "https://cdn.modrinth.com/data/7tEfOcA7/versions/lxhKg8ZN/mezz_config-26.3-neoforge-0.6.5.jar"

@@ -1,12 +1,12 @@
 name = "Friends MC"
 author = "chengweialan"
-version = "0.4.0"
+version = "0.4.1"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "99c971f696ef4f1bd2fdcc388c20ab3954e9a7a684c956a6be13e1b348142539"
+hash = "c9ac0da061bb3be9f79de2a38a9f6c3fea9d6f05ffdc80365acb96aa8d775245"
 
 [versions]
 minecraft = "26.3"

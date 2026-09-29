@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "0.4.0",
+  "release": "0.4.1",
   "minecraft": "26.3",
   "neoforge": "26.3.0.26-beta",
   "mods": [
@@ -142,7 +142,7 @@
       "name": "JEI 物品配方",
       "description": "搜索物品、配方与用途",
       "required": false,
-      "server": false,
+      "server": true,
       "client": true,
       "hidden": false,
       "default": true,
@@ -346,7 +346,7 @@
       "name": "MezzConfig 前置库",
       "description": "JEI 依赖，自动安装",
       "required": false,
-      "server": false,
+      "server": true,
       "client": true,
       "hidden": true,
       "default": true,
@@ -406,6 +406,28 @@
         "prickle"
       ],
       "source": "https://modrinth.com/mod/prickle"
+    },
+    {
+      "id": "ferritecore",
+      "name": "FerriteCore 内存优化",
+      "description": "降低内存占用；搭配 ModernFix，默认推荐安装",
+      "required": false,
+      "server": true,
+      "client": true,
+      "hidden": false,
+      "default": true,
+      "dependencies": [],
+      "version": "9.0.0-neoforge",
+      "projectId": "uXXizFIs",
+      "versionId": "LtVvw4uS",
+      "filename": "ferritecore-9.0.0-neoforge.jar",
+      "url": "https://cdn.modrinth.com/data/uXXizFIs/versions/LtVvw4uS/ferritecore-9.0.0-neoforge.jar",
+      "sha256": "a3292dadb1caf7ad220d3a4b68abff2ad58592ddd372160f9cf66c57d159b539",
+      "size": 71947,
+      "modIds": [
+        "ferritecore"
+      ],
+      "source": "https://modrinth.com/mod/ferrite-core"
     }
   ],
   "unavailable": [

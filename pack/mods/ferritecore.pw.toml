@@ -1,0 +1,17 @@
+name = "FerriteCore 内存优化"
+filename = "ferritecore-9.0.0-neoforge.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/uXXizFIs/versions/LtVvw4uS/ferritecore-9.0.0-neoforge.jar"
+hash-format = "sha256"
+hash = "a3292dadb1caf7ad220d3a4b68abff2ad58592ddd372160f9cf66c57d159b539"
+
+[update.modrinth]
+mod-id = "uXXizFIs"
+version = "LtVvw4uS"
+
+[option]
+optional = true
+default = true
+description = "降低内存占用；搭配 ModernFix，默认推荐安装"

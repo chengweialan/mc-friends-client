@@ -32,7 +32,7 @@ metafile = true
 
 [[files]]
 file = "mods/jei.pw.toml"
-hash = "792b45c48ff5e2c6ac56f150ee811318ee74df17e022f915699ce430ff6f25ba"
+hash = "e3928431430529569026c52c9d3d3b1ab82b20153f3ff07d0cf5c5d8d81d574f"
 metafile = true
 
 [[files]]
@@ -77,7 +77,7 @@ metafile = true
 
 [[files]]
 file = "mods/mezzconfig.pw.toml"
-hash = "9581b2825399fd9eb30515e65703aac1248f7acb2ba1179c56a9900c044e309b"
+hash = "dc3fc23658f4fa8fcdc9daf2fd6a3fb3d34d095a0f4602863d907699e39dc79b"
 metafile = true
 
 [[files]]
@@ -88,4 +88,9 @@ metafile = true
 [[files]]
 file = "mods/prickle.pw.toml"
 hash = "670ace542b1fc517f66423a375c29b715262750337dfc15e6e42eef4f6316202"
+metafile = true
+
+[[files]]
+file = "mods/ferritecore.pw.toml"
+hash = "dafaad96c43851d42e767d298e4a27457e5da0ab59254c1713aeaa164d1021d3"
 metafile = true

@@ -22,3 +22,5 @@ Friends MC 是非商业好友整合包。模组文件保持原样；游戏和模
 - [MezzConfig 前置库](https://modrinth.com/mod/mezzconfig) · 0.6.5 · 国内镜像 + 原站 · MIT
 - [libIPN 前置库](https://modrinth.com/mod/libipn) · neoforge-26.3-6.9.0 · 作者原站下载 · AGPL-3.0-or-later
 - [Prickle 前置库](https://modrinth.com/mod/prickle) · 26.3.0.2 · 作者原站下载 · LGPL-2.1-only
+
+- [FerriteCore 内存优化](https://modrinth.com/mod/ferrite-core) · 9.0.0-neoforge · 作者原站下载 · MIT
