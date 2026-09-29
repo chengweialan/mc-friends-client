@@ -4,6 +4,6 @@
   "minecraft": "26.3",
   "neoforge": "26.3.0.26-beta",
   "java": 25,
-  "packUrl": "https://raw.githubusercontent.com/chengweialan/mc-friends-client/7e5496ffed5cd9d1d8fbd58e876318799b160d30/pack/pack.toml",
-  "catalogSha256": "ff4297aff1ad17cf2234ea04023dfb0a25227615073446986703af11d01723c1"
+  "packUrl": "https://raw.githubusercontent.com/chengweialan/mc-friends-client/20a44600453560e0243b24281e707d6017c351a1/pack/pack.toml",
+  "catalogSha256": "d1aa68fb21cde8326b75fa789d748ef46d21f9bd8b910871947da1170841cacb"
 }
