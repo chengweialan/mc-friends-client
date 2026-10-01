@@ -1,4 +1,4 @@
-﻿param([ValidateSet('','checking','downloading','complete','error')][string]$PreviewState='', [string]$ScreenshotPath='', [switch]$PrepareOnly)
+﻿param([ValidateSet('','checking','downloading','complete','error')][string]$PreviewState='', [string]$ScreenshotPath='', [switch]$PrepareOnly, [ValidateSet('friends','fool')][string]$Pack='friends')
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase
 trap {
@@ -191,6 +191,7 @@ $window.Add_ContentRendered({
         $start=New-Object Diagnostics.ProcessStartInfo
         $start.FileName=Join-Path $env:SystemRoot 'System32/WindowsPowerShell/v1.0/powershell.exe'
         $start.Arguments='-NoProfile -ExecutionPolicy Bypass -File "'+(Join-Path $PSScriptRoot 'Start.ps1')+'" -StatusPath "'+$script:statusFile+'"'
+        $start.Arguments+=' -Pack '+$Pack
         if ($PrepareOnly) { $start.Arguments+=' -PrepareOnly' }
         $start.UseShellExecute=$false; $start.CreateNoWindow=$true
         $start.RedirectStandardOutput=$true; $start.RedirectStandardError=$true

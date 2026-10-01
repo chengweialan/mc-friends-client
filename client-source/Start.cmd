@@ -1,3 +1,3 @@
 @echo off
 cd /d "%~dp0"
-start "" powershell.exe -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy Bypass -File "%~dp0scripts\ProgressWindow.ps1"
+start "" powershell.exe -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy Bypass -File "%~dp0scripts\Select-Pack.ps1"

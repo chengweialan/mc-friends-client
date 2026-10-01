@@ -68,9 +68,12 @@ def build(cache, destination):
     shutil.copy2(ROOT/'PLAYER-GUIDE.md',client/'使用说明.md')
     classes=destination/'updater-classes'
     classes.mkdir()
-    subprocess.run(['javac','--release','17','-encoding','UTF-8','-d',str(classes),str(ROOT/'updater/FriendsUpdater.java')],check=True)
+    subprocess.run(['javac','--release','17','-encoding','UTF-8','-d',str(classes),str(ROOT/'updater/FriendsUpdater.java'),str(ROOT/'updater/FoolUpdater.java')],check=True)
     updater=client/'tools/friends-updater.jar'
-    subprocess.run(['jar','--create','--file',str(updater),'--main-class','FriendsUpdater','-C',str(classes),'.'],check=True)
+    for classname, filename in [('FriendsUpdater','friends-updater.jar'),('FoolUpdater','fool-updater.jar')]:
+        with zipfile.ZipFile(client/'tools'/filename,'w',zipfile.ZIP_DEFLATED) as z:
+            z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\nMain-Class: '+classname+'\n\n')
+            for p in classes.glob(classname+'*.class'):z.write(p,p.name)
     archive=destination/'FriendsMC-Windows-x64.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=5) as z:
         for p in sorted(client.rglob('*')):
@@ -82,6 +85,7 @@ def build(cache, destination):
         for p in sorted((client/'scripts').glob('*.ps1')):
             z.write(p,'scripts/'+p.name)
         z.write(updater,'tools/friends-updater.jar')
+        z.write(client/'tools/fool-updater.jar','tools/fool-updater.jar')
         z.write(ROOT/'download-sources.json','download-sources.json')
         z.write(ROOT/'MOD-CREDITS.md','MOD-CREDITS.md')
         for p in (ROOT/'mirror-licenses').glob('*'):
@@ -98,6 +102,9 @@ def build(cache, destination):
                 info=zipfile.ZipInfo('FriendsMC/'+name);info.create_system=3;info.external_attr=mode<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,data)
             add('Start.command',(ROOT/'mac-source/Start.command').read_bytes(),0o100755)
             add('tools/friends-updater.jar',updater.read_bytes())
+            add('tools/fool-updater.jar',(client/'tools/fool-updater.jar').read_bytes())
+            add('tools/packwiz-installer.jar',(client/'tools/packwiz-installer.jar').read_bytes())
+            add('tools/packwiz-installer-bootstrap.jar',(client/'tools/packwiz-installer-bootstrap.jar').read_bytes())
             add('download-sources.json',(ROOT/'download-sources.json').read_bytes())
             add('MOD-CREDITS.md',(ROOT/'MOD-CREDITS.md').read_bytes())
             for p in (ROOT/'mirror-licenses').glob('*'):
@@ -130,6 +137,11 @@ def build(cache, destination):
     mac_patch=destination/'FriendsMC-macOS-Update.zip'
     with zipfile.ZipFile(mac_patch,'w',zipfile.ZIP_DEFLATED) as z:
         z.write(updater,'tools/friends-updater.jar')
+        z.write(client/'tools/fool-updater.jar','tools/fool-updater.jar')
+        z.write(client/'tools/packwiz-installer.jar','tools/packwiz-installer.jar')
+        z.write(client/'tools/packwiz-installer-bootstrap.jar','tools/packwiz-installer-bootstrap.jar')
+        entry=zipfile.ZipInfo('Start.command');entry.create_system=3;entry.external_attr=0o100755<<16
+        z.writestr(entry,(ROOT/'mac-source/Start.command').read_bytes())
         z.write(ROOT/'download-sources.json','download-sources.json')
         z.write(ROOT/'MOD-CREDITS.md','MOD-CREDITS.md')
         z.write(ROOT/'NETWORK-UPDATE.md','更新说明.md')

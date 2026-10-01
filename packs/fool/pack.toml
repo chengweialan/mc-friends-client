@@ -1,0 +1,13 @@
+name = "Friends MC · 愚者"
+author = "流霜雾影；好友服维护"
+version = "0.3.0-friends.1"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "10cb2451eaffbe30fd4f0c195cc102cd4fcc7f84ef366cbc7088c3bf87d0ff42"
+
+[versions]
+minecraft = "1.20.1"
+forge = "47.4.12"

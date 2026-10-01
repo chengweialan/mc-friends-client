@@ -1,4 +1,8 @@
-﻿param([switch]$PrepareOnly, [string]$StatusPath='')
+﻿param([switch]$PrepareOnly, [string]$StatusPath='', [ValidateSet('friends','fool')][string]$Pack='friends')
+if ($Pack -eq 'fool') {
+    & (Join-Path $PSScriptRoot 'Start-Fool.ps1') -PrepareOnly:$PrepareOnly -StatusPath $StatusPath
+    exit $LASTEXITCODE
+}
 [Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
 $script:StatusPath = $StatusPath
 $script:ReleaseLabel = ''
